@@ -20,13 +20,13 @@
         <mat-option value="volunteer">Volunteer</mat-option>
       </mat-select>
     </mat-form-field>
-    <button class="continue-button"
+    <a class="continue-button"
     mat-raised-button
-    routerLink = ""
+    [routerLink] = "['/requests', userRole]"
     matRipple
     [disabled]="!userRole">
       Continue
-    </button>
+  </a>
     </div>
   </div>
 </div>

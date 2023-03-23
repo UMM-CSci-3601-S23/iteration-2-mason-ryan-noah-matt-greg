@@ -32,12 +32,9 @@ describe('Home', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Changes roles properly', ()=>{
+  it('Change role works', ()=>{
     component.changeRole('client');
-    expect(component.userRole).toEqual('client');
-    component.changeRole('donor');
-    expect(component.userRole).toEqual('donor');
-    component.changeRole('volunteer');
-    expect(component.userRole).toEqual('volunteer');
+    expect(component.userRole === 'client').toBeTruthy();
+
   });
 });

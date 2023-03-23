@@ -12,12 +12,12 @@ import org.bson.UuidRepresentation;
 
 import io.javalin.Javalin;
 import io.javalin.plugin.bundled.RouteOverviewPlugin;
-import io.javalin.http.InternalServerErrorResponse;
+import umm3601.request.RequestController;
 import umm3601.user.UserController;
 
 public class Server {
 
-  private static final int SERVER_PORT = 4567;
+  private static final int SERVER_PORT = 4568;
 
   public static void main(String[] args) {
 
@@ -42,6 +42,7 @@ public class Server {
 
     // Initialize dependencies
     UserController userController = new UserController(database);
+    RequestController requestController = new RequestController(database);
 
     Javalin server = Javalin.create(config ->
       config.plugins.register(new RouteOverviewPlugin("/api"))
@@ -74,6 +75,17 @@ public class Server {
     // of the HTTP request
     server.post("/api/users", userController::addNewUser);
 
+    //Request api endpoints
+
+    //List requests, filtered using query parameters
+    server.get("/api/requests/donor", requestController::getRequests);
+
+    server.post("/api/requests/new", requestController::addNewRequest);
+
+    //Deleting requests
+    server.delete("/api/requests/{id}]", requestController::deleteRequest);
+
+
     // This catches any uncaught exceptions thrown in the server
     // code and turns them into a 500 response ("Internal Server
     // Error Response"). In general you'll like to *never* actually
@@ -83,8 +95,10 @@ public class Server {
     // certainly want to use a logging library to log all errors
     // caught here so you'd know about them and could try to address
     // them.
+    /*
     server.exception(Exception.class, (e, ctx) -> {
       throw new InternalServerErrorResponse(e.toString());
     });
+  */
   }
 }

@@ -6,4 +6,4 @@ export interface Request {
 }
 
 export type ItemType = 'food' | 'toiletries' | 'other';
-export type FoodType = 'dairy' | 'grain' | 'meat' | 'fruit' | 'vegetables';
+export type FoodType = '' | 'dairy' | 'grain' | 'meat' | 'fruit' | 'vegetable';
