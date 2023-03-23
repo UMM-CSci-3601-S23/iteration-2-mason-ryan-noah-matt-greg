@@ -44,6 +44,7 @@ public class RequestSpec {
     assertTrue(request1.hashCode() == request2.hashCode());
   }
 
+  @SuppressWarnings({"unlikely-arg-type"})
   @Test
   void requestAreNotEqualToOtherKindsOfThings() {
     request1._id = FAKE_ID_STRING_1;
