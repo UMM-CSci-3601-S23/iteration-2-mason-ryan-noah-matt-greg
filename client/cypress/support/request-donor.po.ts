@@ -1,4 +1,4 @@
-import { ItemType, FoodType } from 'src/app/requests/request';
+
 
 export class RequestDonorPage {
   private readonly baseUrl = '/requests/donor';
@@ -18,15 +18,5 @@ export class RequestDonorPage {
 
   getRequestListItems() {
     return cy.get(this.requestListItemSelector);
-  }
-
-  selectItemType(value: ItemType) {
-    cy.get(this.requestItemTypeDropDown).click();
-    return cy.get(`${this.dropdownOptionSelector}[value="${value}"]`).click();
-  }
-
-  selectFoodType(value: FoodType) {
-    cy.get(this.requestFoodTypeDropDown).click();
-    return cy.get(`${this.dropdownOptionSelector}[value="${value}"]`).click();
   }
 }

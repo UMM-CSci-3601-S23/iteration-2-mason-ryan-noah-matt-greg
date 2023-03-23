@@ -6,8 +6,6 @@ export class NewRequestPage {
   private readonly title = '.new-request-title';
   private readonly button = '[data-test=confirmNewRequestButton]';
   private readonly snackBar = '.mat-mdc-simple-snack-bar';
-  private readonly itemTypeFieldName = 'itemType';
-  private readonly foodTypeFieldName = 'foodType';
   private readonly descFieldName = 'description';
   private readonly formFieldSelector = `mat-form-field`;
   private readonly dropDownSelector = `mat-option`;
@@ -52,6 +50,7 @@ export class NewRequestPage {
     return cy.get(this.snackBar);
   }
 
+  /**
   newRequest(newRequest: Request) {
     this.getFormField(this.descFieldName).type(newRequest.description);
     this.setMatSelect('itemType', this.capitalize(newRequest.itemType));
@@ -60,5 +59,6 @@ export class NewRequestPage {
     }
     return this.newRequestButton().click();
   }
+   */
 
 }
