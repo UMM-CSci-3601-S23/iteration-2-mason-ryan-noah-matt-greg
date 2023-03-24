@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ClientFormComponent } from './form/client-form.component';
 import { HomeComponent } from './home/home.component';
 import { NewRequestComponent } from './requests/new-request/new-request.component';
 import { RequestDonorComponent } from './requests/request-donor.component';
@@ -14,6 +15,7 @@ const routes: Routes = [
   {path: 'requests/volunteer', component: RequestVolunteerComponent, title: 'Volunteer View'},
   {path: 'requests/client', component: NewRequestComponent, title: 'New Request'},
   {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
+  {path: 'form/client', component: ClientFormComponent, title: 'Client Form'}
 
 ];
 
