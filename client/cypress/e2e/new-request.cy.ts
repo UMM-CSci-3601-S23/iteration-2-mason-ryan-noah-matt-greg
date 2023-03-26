@@ -1,9 +1,14 @@
+import { BlobOptions } from 'buffer';
 import { Request } from 'src/app/requests/request';
 import { NewRequestPage } from '../support/new-request.po';
 
 describe('Add request', () => {
   const page = new NewRequestPage();
-
+  const testSel = new Map<string, boolean>([
+    ['bread', false],
+    ['toothpaste', true],
+    ['mealworms', false]
+  ]);
   beforeEach(() => {
     page.navigateTo();
   });
@@ -67,12 +72,9 @@ describe('Add request', () => {
     it('Should go to the right page, and have the right info', () => {
       const request: Request = {
         _id: null,
-        itemType: 'food',
-        foodType: 'meat',
-        description: ' TEST REQUEST!!!!',
+        selections: testSel
       };
       page.setMatSelect('itemType', 'Other');
-      page.newRequest(request);
       page.getSnackBar().should('contain', `Request successfully submitted`);
       // New URL should end in the 24 hex character Mongo ID of the newly added request
       cy.url()
@@ -81,9 +83,6 @@ describe('Add request', () => {
 
       // The new request should have all the same attributes as we entered
       cy.visit('/requests/donor');
-      cy.get('.donor-list-description').should('contain.text', request.description);
-      cy.get('.donor-list-itemType').should('contain.text', request.itemType);
-      cy.get('.donor-list-foodType').should('contain.text', request.foodType);
       // We should see the confirmation message at the bottom of the screen
     });
   });

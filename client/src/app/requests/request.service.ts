@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Request, ItemType, FoodType } from './request';
+import { Request } from './request';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -13,26 +13,21 @@ export class RequestService {
   readonly requestUrl: string = `${environment.apiUrl}requests/donor`;
   readonly newRequestUrl: string = `${environment.apiUrl}requests/new`;
 
-  private readonly itemTypeKey = 'itemType';
-  private readonly foodTypeKey = 'foodType';
+  private readonly selKey = 'selections';
 
   constructor(private httpClient: HttpClient) {
   }
 
-  getRequests(filters?: {itemType?: ItemType; foodType?: FoodType}): Observable<Request[]> {
+  getRequests(filters?: {selections?: Map<string, boolean>}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
-      if (filters.itemType) {
-        httpParams = httpParams.set(this.itemTypeKey, filters.itemType);
-      }
-      if (filters.foodType) {
-        httpParams = httpParams.set(this.foodTypeKey, filters.foodType);
+      if (filters.selections) {
+        httpParams = httpParams.set(this.selKey, filters.selections.get('bread'));
       }
     }
     return this.httpClient.get<Request[]>(this.requestUrl, {
       params: httpParams,
     });
-
   }
 
   filterRequests(requests: Request[]): Request[] {
