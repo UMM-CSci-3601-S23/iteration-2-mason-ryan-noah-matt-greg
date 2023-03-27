@@ -1,7 +1,7 @@
 // import {Component} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ClientFormService } from './client-form.service';
@@ -45,6 +45,7 @@ export class ClientFormComponent implements OnInit {
   addRequestForm: UntypedFormGroup;
   firstFormGroup: FormGroup = this.formBuilder.group({firstCtrl: ['']});
   secondFormGroup: FormGroup = this.formBuilder.group({secondCtrl: ['']});
+  isLinear = false;
 
   addTodoValidationMessages = {
     name: [
