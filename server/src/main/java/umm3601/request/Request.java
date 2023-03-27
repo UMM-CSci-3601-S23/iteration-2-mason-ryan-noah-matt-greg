@@ -2,6 +2,9 @@ package umm3601.request;
 
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import umm3601.request.ItemList;
 
 @SuppressWarnings({"VisibilityModifier"})
 
@@ -15,6 +18,13 @@ public class Request {
   public String itemType;
   public String description;
   public String foodType;
+
+  // Exhaustive list of items on the physical request form
+  public ItemList itemList = new ItemList();
+  public String[] formItems = itemList.formItems;
+
+  public LocalDateTime timeSubmitted;
+  public HashMap<String, Boolean> selections;
 
   @Override
   public boolean equals(Object obj) {

@@ -30,8 +30,10 @@ public class RequestController {
 
   private static final String ITEM_TYPE_REGEX = "^(food|toiletries|other|FOOD)$";
   private static final String FOOD_TYPE_REGEX = "^(|dairy|grain|meat|fruit|vegetable)$";
+  private static final String SORT_ORDER_REGEX = "^(oldest|newest)$";
 
   private final JacksonMongoCollection<Request> requestCollection;
+
 
   public RequestController(MongoDatabase database) {
     requestCollection = JacksonMongoCollection.builder().build(
@@ -127,14 +129,12 @@ public class RequestController {
   public void addNewRequest(Context ctx) {
     /*
      * The follow chain of statements uses the Javalin validator system
-     * to verify that instance of `User` provided in this context is
+     * to verify that instance of `Request` provided in this context is
      * a "legal" request. It checks the following things (in order):
      *    - itemType is valid
      *    - foodType is Valid
      */
-    Request newRequest = ctx.bodyValidator(Request.class)
-      .check(req -> req.itemType.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
-      .check(req -> req.foodType.matches(FOOD_TYPE_REGEX), "Request must contain valid food type").get();
+    Request newRequest = constructNewRequest(ctx);
 
     requestCollection.insertOne(newRequest);
 
@@ -146,6 +146,18 @@ public class RequestController {
     ctx.status(HttpStatus.CREATED);
   }
 
+  public Request constructNewRequest(Context ctx){
+      Request newRequest = new Request();
+      String[] items = newRequest.formItems;
+      for(int i = 0; i < items.length; i++){
+        try{
+          newRequest.selections.put(items[i], Boolean.parseBoolean(ctx.queryParam(items[i])));
+        }catch(Exception e){
+          System.out.println(items[i] + "not requested");
+        }
+      }
+      return newRequest;
+  }
   /**
    * Delete the user specified by the `id` parameter in the request.
    *
