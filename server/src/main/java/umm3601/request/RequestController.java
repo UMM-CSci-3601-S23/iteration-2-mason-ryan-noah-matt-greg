@@ -62,7 +62,7 @@ public class RequestController {
     }
   }
 
-  /**
+  /**foodType and itemType
    * Set the JSON body of the response to be a list of all the requests returned from the database
    * that match any requested filters and ordering
    *
@@ -94,12 +94,7 @@ public class RequestController {
     List<Bson> filters = new ArrayList<>(); // start with a blank document
     /*
     if (ctx.queryParamMap().containsKey(ITEM_TYPE_KEY)) {
-      String itemType = ctx.queryParamAsClass(ITEM_TYPE_KEY, String.class)
-        .check(it -> it.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
-        .get();
-      filters.add(eq(ITEM_TYPE_KEY, itemType));
-    }
-    if (ctx.queryParamMap().containsKey(FOOD_TYPE_KEY)) {
+      String itemType = ctx.queryParamAsClass(ITEM_TYPE_KEY, String.clfoodType and itemType
       String foodType = ctx.queryParamAsClass(FOOD_TYPE_KEY, String.class)
         .check(it -> it.matches(FOOD_TYPE_REGEX), "Request must contain valid food type")
         .get();
