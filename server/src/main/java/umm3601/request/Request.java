@@ -2,9 +2,9 @@ package umm3601.request;
 
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import umm3601.request.ItemList;
 
 @SuppressWarnings({"VisibilityModifier"})
 
@@ -14,10 +14,6 @@ public class Request {
   @SuppressWarnings({"MemberName"})
 
   public String _id;
-
-  public String itemType;
-  public String description;
-  public String foodType;
 
   // Exhaustive list of items on the physical request form
   public ItemList itemList = new ItemList();

@@ -187,7 +187,7 @@ class RequestControllerSpec {
     assertEquals(db.getCollection("requests").countDocuments(), requestArrayListCaptor.getValue().size());
   }
 
-  /* */
+  /*
   @Test
   void canGetRequestsWithItemType() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
@@ -296,6 +296,7 @@ class RequestControllerSpec {
     assertEquals("food", requestCaptor.getValue().itemType);
     assertEquals(samsId.toHexString(), requestCaptor.getValue()._id);
   }
+  */
 
   @Test
   void getRequestsWithBadId() throws IOException {
