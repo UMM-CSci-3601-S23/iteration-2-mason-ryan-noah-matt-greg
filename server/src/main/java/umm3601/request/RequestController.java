@@ -24,12 +24,8 @@ import java.security.NoSuchAlgorithmException;
 
 
 public class RequestController {
-  static final String ITEM_TYPE_KEY = "itemType";
-  static final String FOOD_TYPE_KEY = "foodType";
   static final String SORT_ORDER_KEY = "sortorder";
 
-  private static final String ITEM_TYPE_REGEX = "^(food|toiletries|other|FOOD)$";
-  private static final String FOOD_TYPE_REGEX = "^(|dairy|grain|meat|fruit|vegetable)$";
   private static final String SORT_ORDER_REGEX = "^(oldest|newest)$";
 
   private final JacksonMongoCollection<Request> requestCollection;
@@ -96,6 +92,7 @@ public class RequestController {
 
   private Bson constructFilter(Context ctx) {
     List<Bson> filters = new ArrayList<>(); // start with a blank document
+    /*
     if (ctx.queryParamMap().containsKey(ITEM_TYPE_KEY)) {
       String itemType = ctx.queryParamAsClass(ITEM_TYPE_KEY, String.class)
         .check(it -> it.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
@@ -108,8 +105,13 @@ public class RequestController {
         .get();
       filters.add(eq(FOOD_TYPE_KEY, foodType));
     }
-
-
+    if (ctx.queryParamMap().containsKey(SORT_ORDER_KEY)){
+      String sortOrder = ctx.queryParamAsClass(SORT_ORDER_KEY, String.class)
+        .check(it -> it.matches(SORT_ORDER_REGEX), "Sort order must be 'oldest' or 'newest")
+        .get();
+      filters.add(eq(SORT_ORDER_KEY));
+    }
+    */
     // Combine the list of filters into a single filtering document.
     Bson combinedFilter = filters.isEmpty() ? new Document() : and(filters);
 
@@ -120,9 +122,8 @@ public class RequestController {
     // Sort the results. Use the `sortby` query param (default "name")
     // as the field to sort by, and the query param `sortorder` (default
     // "asc") to specify the sort order.
-    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "name");
-    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "asc");
-    Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
+    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "newest");
+    Bson sortingOrder = sortOrder.equals("newest") ?  Sorts.descending("timeSubmitted") : Sorts.ascending("timeSubmitted");
     return sortingOrder;
   }
 
@@ -146,6 +147,10 @@ public class RequestController {
     ctx.status(HttpStatus.CREATED);
   }
 
+  /*
+   * Parses the list of request form items and adds any included in the request URL to the map stored in
+   * the request class
+   */
   public Request constructNewRequest(Context ctx){
       Request newRequest = new Request();
       String[] items = newRequest.formItems;
