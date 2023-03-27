@@ -22,7 +22,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatStepperModule} from '@angular/material/stepper';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -51,7 +53,9 @@ const MATERIAL_MODULES: any[] = [
   MatSnackBarModule,
   MatToolbarModule,
   MatTooltipModule,
+  MatStepperModule,
   MatCheckboxModule,
+
 ];
 
 @NgModule({

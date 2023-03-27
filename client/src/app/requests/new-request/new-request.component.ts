@@ -2,18 +2,21 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { FoodType } from '../request';
-import { ItemType } from '../request';
 import { RequestService } from '../request.service';
+import { Request} from '../request';
 
 @Component({
   selector: 'app-new-request',
   templateUrl: './new-request.component.html',
   styleUrls: ['./new-request.component.scss']
 })
-export class NewRequestComponent {
 
-  public type: ItemType = 'food';
+export class NewRequestComponent {
+  testSel = new Map<string, boolean>([
+    ['bread', false],
+    ['toothpaste', true],
+    ['mealworms', false]
+  ]);
 
   newRequestForm = new FormGroup({
     // We want descriptions to be short and sweet, yet still required so we have at least some idea what
@@ -24,14 +27,6 @@ export class NewRequestComponent {
       Validators.maxLength(200),
     ])),
 
-    itemType: new FormControl<ItemType>('food',Validators.compose([
-      Validators.required,
-      Validators.pattern('^(food|toiletries|other)$'),
-    ])),
-
-    foodType: new FormControl<FoodType>('',Validators.compose([
-      Validators.pattern('^(dairy|grain|meat|fruit|vegetable|)$'),
-    ])),
   });
 
   readonly newRequestValidationMessages = {
@@ -39,13 +34,6 @@ export class NewRequestComponent {
       {type: 'required', message: 'Description is required'},
       {type: 'minlength', message: 'Description must be at least 5 characters long'},
       {type: 'maxlength', message: 'Description cannot be more than 200 characters long'},
-    ],
-    itemType: [
-      { type: 'required', message: 'Item type is required' },
-      { type: 'pattern', message: 'Item type must be food, toiletries, or other' },
-    ],
-    foodType: [
-      {type: 'pattern', message: 'Food type must be one of dairy, grain, meat, fruit, or vegetable'},
     ]
   };
 
@@ -66,8 +54,8 @@ export class NewRequestComponent {
     return 'Unknown error';
   }
 
-  submitForm() {
-    this.requestService.addRequest(this.newRequestForm.value).subscribe({
+  /**submitForm() {
+    this.requestService.addRequest().subscribe({
       next: (newId) => {
         this.snackBar.open(
           `Request successfully submitted`,
@@ -86,4 +74,5 @@ export class NewRequestComponent {
       // complete: () => console.log('Add user completes!')
     });
   }
+  */
 }

@@ -1,6 +1,6 @@
 <div class="flex-row">
   <div class="flex-1">
-    <form [formGroup]="newRequestForm" (ngSubmit)="submitForm();">
+    <form [formGroup]="newRequestForm" >
       <mat-card-header>
         <mat-card-title class = "new-request-title">
           Item Request Form
@@ -12,7 +12,6 @@
         <mat-label>Item Category</mat-label>
         <mat-select
         required
-        [(ngModel)]="type"
         formControlName="itemType"
         data-test="itemTypeSelect">
           <mat-option value ="--">--</mat-option>
@@ -21,13 +20,11 @@
           <mat-option value="other">Other</mat-option>
         </mat-select>
         <mat-error *ngIf="formControlHasError('itemType')" data-test="itemTypeError">
-          {{getErrorMessage('itemType')}}
         </mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Food Category</mat-label>
         <mat-select
-        [disabled]="type !== 'food'"
         formControlName="foodType"
         >
           <mat-option value="dairy">Dairy</mat-option>
@@ -36,9 +33,6 @@
           <mat-option value="fruit">Fruit</mat-option>
           <mat-option value="vegetable">Vegetable</mat-option>
         </mat-select>
-        <mat-error *ngIf="formControlHasError('foodType')" data-test="foodTypeError">
-          {{getErrorMessage('foodType')}}
-        </mat-error>
       </mat-form-field>
     </div>
     <div>

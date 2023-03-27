@@ -7,24 +7,23 @@ import { RequestService } from './request.service';
 
 describe('RequestService', () => {
   //small collection of test Requests
+  const testSel = new Map<string, boolean>([
+    ['bread', false],
+    ['toothpaste', true],
+    ['mealworms', false]
+  ]);
   const testRequests: Request[] = [
     {
       _id: '1',
-      itemType: 'food',
-      description: 'I would like to be able to get some spaghetti noodles',
-      foodType: 'grain'
+      selections: testSel
     },
     {
       _id: '2',
-      itemType: 'toiletries',
-      description: 'I need some toothpaste',
-      foodType: ''
+      selections: testSel
     },
     {
       _id: '3',
-      itemType: 'other',
-      description: 'Would it be possible for me to get some Advil?',
-      foodType: ''
+      selections: testSel
     }
   ];
 
@@ -61,68 +60,6 @@ describe('RequestService', () => {
     });
   });
 
-  describe('When getRequests() is called with a parameter', () => {
-    //test food top level category
-    it('correctly calls api/requests with itemType \'food\'', () => {
-      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
-
-      //getting requests with top category food
-      requestService.getRequests({itemType: 'food'}).subscribe(() => {
-        expect(mockedMethod)
-          .withContext('one call')
-          .toHaveBeenCalledTimes(1);
-
-        expect(mockedMethod)
-          .withContext('talks to the correct endpoint')
-          .toHaveBeenCalledWith(requestService.requestUrl, { params: new HttpParams().set('itemType', 'food')});
-      });
-    });
-    //test a foodType level category
-    it('correctly calls api/requests with foodType \'dairy\'', () => {
-      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
-
-      //get requests with foodType dairy
-      requestService.getRequests({foodType: 'dairy'}).subscribe(() => {
-        //check if called once
-        expect(mockedMethod)
-          .withContext('one call')
-          .toHaveBeenCalledTimes(1);
-        //check if it's at the correct endpoint
-        expect(mockedMethod)
-          .withContext('talks to the correct endpoint')
-          .toHaveBeenCalledWith(requestService.requestUrl, { params: new HttpParams().set('foodType', 'dairy')});
-      });
-    });
-  });
-
-  describe('When getRequests() is called with multiple parameters', () => {
-    //test a itemType 'food' with a foodType 'meat'
-    it('correctly calls api/requests with itemType \'food\' and foodType \'meat\'', () => {
-      const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testRequests));
-
-      requestService.getRequests({itemType: 'food', foodType: 'meat'}).subscribe(() => {
-        //This gets the arguments for the first call to the 'mockMethod'
-        const [url, options] = mockedMethod.calls.argsFor(0);
-        //Gets the HttpParams from the options part of the call
-        const calledHttpParams: HttpParams = (options.params) as HttpParams;
-        expect(mockedMethod)
-          .withContext('one call')
-          .toHaveBeenCalledTimes(1);
-
-        expect(url)
-          .withContext('talks to the correct endpoint')
-          .toEqual(requestService.requestUrl);
-
-        expect(calledHttpParams.get('itemType'))
-          .withContext('type of item')
-          .toEqual('food');
-
-        expect(calledHttpParams.get('foodType'))
-          .withContext('type of food')
-          .toEqual('meat');
-      });
-    });
-  });
 
   describe('filterRequests', ()=> {
     it('returns the correct array of requests', ()=>{
