@@ -26,24 +26,35 @@
       </mat-form-field>
     </div>
 
-      <div class="flex-row gap-8 flex-wrap form-fruits">Fruits
-        <section class="form-fruits-fresh" [formGroup]="foods">
-          <mat-card-subtitle class="fruits-fresh-subtitle">Fresh</mat-card-subtitle>
-          <mat-checkbox formControlName="miscFreshFruit">Miscellaneous Fresh Fruit as available</mat-checkbox><br />
-          <mat-checkbox formControlName="appleJuice">Apple juice</mat-checkbox><br />
-          <mat-checkbox formControlName="frozenPeaches">Frozen peaches</mat-checkbox><br />
-        </section>
-        <section class="form-fruits-canned" [formGroup]="foods">
-          <mat-card-subtitle class="fruits-canned-subtitle">Canned</mat-card-subtitle>
-          <mat-checkbox formControlName="mixedFruit">Mixed fruit</mat-checkbox><br />
-          <mat-checkbox formControlName="peaches">Peaches</mat-checkbox><br />
-          <mat-checkbox formControlName="appleSauce">Apple sauce</mat-checkbox><br />
-        </section>
-        <section class="form-fruits-dried" [formGroup]="foods">
-          <mat-card-subtitle class="dried-subtitle">Dried</mat-card-subtitle>
-          <mat-checkbox formControlName="dates">Dates</mat-checkbox><br />
-        </section>
-      </div>
+      <mat-vertical-stepper animationDuration="400ms">
+        <mat-step [stepControl]="firstFormGroup">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Fruits</ng-template>
+            <mat-form-field>
+             <section class="form-fruits-fresh" [formGroup]="foods">
+                <mat-card-subtitle class="fruits-fresh-subtitle">Fresh</mat-card-subtitle>
+                <mat-checkbox formControlName="miscFreshFruit">Miscellaneous Fresh Fruit as available</mat-checkbox><br />
+                <mat-checkbox formControlName="appleJuice">Apple juice</mat-checkbox><br />
+                <mat-checkbox formControlName="frozenPeaches">Frozen peaches</mat-checkbox><br />
+             </section>
+              <section class="form-fruits-canned" [formGroup]="foods">
+               <mat-card-subtitle class="fruits-canned-subtitle">Canned</mat-card-subtitle>
+                <mat-checkbox formControlName="mixedFruit">Mixed fruit</mat-checkbox><br />
+                <mat-checkbox formControlName="peaches">Peaches</mat-checkbox><br />
+               <mat-checkbox formControlName="appleSauce">Apple sauce</mat-checkbox><br />
+             </section>
+              <section class="form-fruits-dried" [formGroup]="foods">
+                <mat-card-subtitle class="dried-subtitle">Dried</mat-card-subtitle>
+               <mat-checkbox formControlName="dates">Dates</mat-checkbox><br />
+              </section>
+           </mat-form-field>
+            <div>
+             <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+     </mat-vertical-stepper>
+
 
       <div class="flex-row gap-8 flex-wrap form-vegetables">Vegetables
         <section class="form-vegetables-fresh" [formGroup]="foods">
