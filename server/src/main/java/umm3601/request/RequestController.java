@@ -24,14 +24,12 @@ import java.security.NoSuchAlgorithmException;
 
 
 public class RequestController {
-  static final String ITEM_TYPE_KEY = "itemType";
-  static final String FOOD_TYPE_KEY = "foodType";
   static final String SORT_ORDER_KEY = "sortorder";
 
-  private static final String ITEM_TYPE_REGEX = "^(food|toiletries|other|FOOD)$";
-  private static final String FOOD_TYPE_REGEX = "^(|dairy|grain|meat|fruit|vegetable)$";
+  private static final String SORT_ORDER_REGEX = "^(oldest|newest)$";
 
   private final JacksonMongoCollection<Request> requestCollection;
+
 
   public RequestController(MongoDatabase database) {
     requestCollection = JacksonMongoCollection.builder().build(
@@ -64,7 +62,7 @@ public class RequestController {
     }
   }
 
-  /**
+  /**foodType and itemType
    * Set the JSON body of the response to be a list of all the requests returned from the database
    * that match any requested filters and ordering
    *
@@ -94,20 +92,21 @@ public class RequestController {
 
   private Bson constructFilter(Context ctx) {
     List<Bson> filters = new ArrayList<>(); // start with a blank document
+    /*
     if (ctx.queryParamMap().containsKey(ITEM_TYPE_KEY)) {
-      String itemType = ctx.queryParamAsClass(ITEM_TYPE_KEY, String.class)
-        .check(it -> it.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
-        .get();
-      filters.add(eq(ITEM_TYPE_KEY, itemType));
-    }
-    if (ctx.queryParamMap().containsKey(FOOD_TYPE_KEY)) {
+      String itemType = ctx.queryParamAsClass(ITEM_TYPE_KEY, String.clfoodType and itemType
       String foodType = ctx.queryParamAsClass(FOOD_TYPE_KEY, String.class)
         .check(it -> it.matches(FOOD_TYPE_REGEX), "Request must contain valid food type")
         .get();
       filters.add(eq(FOOD_TYPE_KEY, foodType));
     }
-
-
+    if (ctx.queryParamMap().containsKey(SORT_ORDER_KEY)){
+      String sortOrder = ctx.queryParamAsClass(SORT_ORDER_KEY, String.class)
+        .check(it -> it.matches(SORT_ORDER_REGEX), "Sort order must be 'oldest' or 'newest")
+        .get();
+      filters.add(eq(SORT_ORDER_KEY));
+    }
+    */
     // Combine the list of filters into a single filtering document.
     Bson combinedFilter = filters.isEmpty() ? new Document() : and(filters);
 
@@ -118,23 +117,20 @@ public class RequestController {
     // Sort the results. Use the `sortby` query param (default "name")
     // as the field to sort by, and the query param `sortorder` (default
     // "asc") to specify the sort order.
-    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "name");
-    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "asc");
-    Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
+    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "newest");
+    Bson sortingOrder = sortOrder.equals("newest") ?  Sorts.descending("timeSubmitted") : Sorts.ascending("timeSubmitted");
     return sortingOrder;
   }
 
   public void addNewRequest(Context ctx) {
     /*
      * The follow chain of statements uses the Javalin validator system
-     * to verify that instance of `User` provided in this context is
+     * to verify that instance of `Request` provided in this context is
      * a "legal" request. It checks the following things (in order):
      *    - itemType is valid
      *    - foodType is Valid
      */
-    Request newRequest = ctx.bodyValidator(Request.class)
-      .check(req -> req.itemType.matches(ITEM_TYPE_REGEX), "Request must contain valid item type")
-      .check(req -> req.foodType.matches(FOOD_TYPE_REGEX), "Request must contain valid food type").get();
+    Request newRequest = constructNewRequest(ctx);
 
     requestCollection.insertOne(newRequest);
 
@@ -146,6 +142,22 @@ public class RequestController {
     ctx.status(HttpStatus.CREATED);
   }
 
+  /*
+   * Parses the list of request form items and adds any included in the request URL to the map stored in
+   * the request class
+   */
+  public Request constructNewRequest(Context ctx){
+      Request newRequest = new Request();
+      String[] items = newRequest.formItems;
+      for(int i = 0; i < items.length; i++){
+        try{
+          newRequest.selections.put(items[i], Boolean.parseBoolean(ctx.queryParam(items[i])));
+        }catch(Exception e){
+          System.out.println(items[i] + "not requested");
+        }
+      }
+      return newRequest;
+  }
   /**
    * Delete the user specified by the `id` parameter in the request.
    *

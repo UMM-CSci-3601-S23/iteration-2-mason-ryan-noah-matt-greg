@@ -3,56 +3,77 @@
     "_id": {
       "$oid": "588935f57546a2daea44de7c"
     },
-    "itemType": "food",
-    "description": "I'd like some apples",
-    "foodType": "fruit"
+    "selections": {
+      "corn": true,
+      "crackers": true,
+      "ranchDressing": false
+     },
+     "timeSubmitted": "2014-10-1 3:00 PM GMT+1:00"
   },
   {
     "_id": {
       "$oid": "588935f5597715f06f3e8f6c"
     },
-    "itemType": "toiletries",
-    "description": "I need some toothpaste",
-    "foodType": ""
+    "selections": {
+     "bread": true,
+     "shampoo": true,
+     "tomatoSoup": false
+    },
+    "timeSubmitted": "2013-10-1 3:00 PM GMT+1:00"
   },
   {
     "_id": {
       "$oid": "588935f51c55b55c75a84848"
     },
-    "itemType": "other",
-    "description": "I need paper plates",
-    "foodType": ""
+    "selections": {
+      "vegCurry": true,
+      "glutenFree": true,
+      "hotSauce": false
+     },
+     "timeSubmitted": "2016-10-1 3:00 PM GMT+1:00"
   },
   {
     "_id": {
       "$oid": "588935f52787254123f71fed"
     },
-    "itemType": "food",
-    "description": "Need milk",
-    "foodType": "dairy"
+    "selections": {
+      "seasonings": true,
+      "bakedGoods": true,
+      "lowSugar": false
+     },
+     "timeSubmitted": "2017-10-1 3:00 PM GMT+1:00"
   },
   {
     "_id": {
       "$oid": "588935f5de613130e931ffd5"
     },
-    "itemType": "food",
-    "description": "I need bread",
-    "foodType": "grain"
+    "selections": {
+      "miscSoups": true,
+      "greenBeans": true,
+      "vegetableOil": false
+     },
+     "timeSubmitted": "2018-10-1 3:00 PM GMT+1:00"
   },
   {
     "_id": {
       "$oid": "588935f55b432bb2ff322160"
     },
-    "itemType": "food",
-    "description": "I would like some more ground beef",
-    "foodType": "meat"
+    "selections": {
+      "hotDogSauce": true,
+      "almonds": true,
+      "chickenNoodle": false
+     },
+     "timeSubmitted": "2019-10-1 3:00 PM GMT+1:00"
   },
   {
     "_id": {
       "$oid": "588935f5556f992bf8f37c01"
     },
-    "itemType": "food",
-    "description": "If possible I'd like to be able to add more vegetables to my meals",
-    "foodType": "vegetable"
+    "selections": {
+      "bread": true,
+      "walnuts": true,
+      "misc": false
+     },
+     "timeSubmitted": "2015-10-1 3:00 PM GMT+1:00"
   }
 ]
