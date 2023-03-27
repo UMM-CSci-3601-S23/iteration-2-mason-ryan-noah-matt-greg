@@ -23,6 +23,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -30,6 +32,7 @@ import { HomeComponent } from './home/home.component';
 import { RequestDonorComponent } from './requests/request-donor.component';
 import { RequestVolunteerComponent } from './requests/request-volunteer.component';
 import { NewRequestComponent } from './requests/new-request/new-request.component';
+import { ClientFormComponent } from './form/client-form.component';
 
 
 
@@ -51,6 +54,8 @@ const MATERIAL_MODULES: any[] = [
   MatToolbarModule,
   MatTooltipModule,
   MatStepperModule,
+  MatCheckboxModule,
+
 ];
 
 @NgModule({
@@ -60,6 +65,7 @@ const MATERIAL_MODULES: any[] = [
     NewRequestComponent,
     RequestDonorComponent,
     RequestVolunteerComponent,
+    ClientFormComponent,
   ],
   imports: [
     BrowserModule,
