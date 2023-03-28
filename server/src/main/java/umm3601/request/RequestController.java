@@ -130,7 +130,8 @@ public class RequestController {
      *    - itemType is valid
      *    - foodType is Valid
      */
-    Request newRequest = constructNewRequest(ctx);
+
+    Request newRequest = ctx.bodyAsClass(Request.class);
 
     requestCollection.insertOne(newRequest);
 
@@ -142,22 +143,6 @@ public class RequestController {
     ctx.status(HttpStatus.CREATED);
   }
 
-  /*
-   * Parses the list of request form items and adds any included in the request URL to the map stored in
-   * the request class
-   */
-  public Request constructNewRequest(Context ctx){
-      Request newRequest = new Request();
-      String[] items = newRequest.formItems;
-      for(int i = 0; i < items.length; i++){
-        try{
-          newRequest.selections.put(items[i], Boolean.parseBoolean(ctx.queryParam(items[i])));
-        }catch(Exception e){
-          System.out.println(items[i] + "not requested");
-        }
-      }
-      return newRequest;
-  }
   /**
    * Delete the user specified by the `id` parameter in the request.
    *

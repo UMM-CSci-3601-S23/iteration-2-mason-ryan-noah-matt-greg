@@ -55,7 +55,7 @@ export class ClientFormComponent implements OnInit {
 
   createForms() {
 
-    // add todo form validations
+    // add form validations
     this.addRequestForm = this.fb.group({
       // We allow alphanumeric input and limit the length for name.
       name: new UntypedFormControl('', Validators.compose([

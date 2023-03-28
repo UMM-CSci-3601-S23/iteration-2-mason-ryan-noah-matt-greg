@@ -20,7 +20,7 @@ public class Request {
   public String[] formItems = itemList.formItems;
 
   public LocalDateTime timeSubmitted;
-  public HashMap<String, Boolean> selections;
+  public String[] selections;
 
   @Override
   public boolean equals(Object obj) {
@@ -34,6 +34,15 @@ public class Request {
   @Override
   public int hashCode() {
     return _id.hashCode();
+  }
+
+  public void addToSelections(String newItem){
+    int newLength = selections.length + 1;
+    String[] newArray = new String[newLength];
+    for (int i = 0; i< selections.length; i++){
+      newArray[i] = selections[i];
+    }
+    newArray[newLength - 1] = newItem;
   }
 
 }
