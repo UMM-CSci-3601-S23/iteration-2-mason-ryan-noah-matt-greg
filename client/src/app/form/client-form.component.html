@@ -20,7 +20,26 @@
       <ng-template matStepLabel>Fill out your name</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Name</mat-label>
-        <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+        <input matInput placeholder="Last name, First name" formControlName="name" required>
+        <mat-error *ngFor="let validation of addTodoValidationMessages.name">
+          <mat-error class="error-message" data-test="nameError"
+                    *ngIf="addRequestForm.get('name').hasError(validation.type) && (addRequestForm.get('name').dirty || addRequestForm.get('name').touched)">
+            {{validation.message}}
+          </mat-error>
+        </mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <!--Family Stepper-->
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Family Size</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Number in household</mat-label>
+        <input matInput placeholder="" formControlName="firstCtrl" required>
       </mat-form-field>
       <div>
         <button mat-button matStepperNext>Next</button>

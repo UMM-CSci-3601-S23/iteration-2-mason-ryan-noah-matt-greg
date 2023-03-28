@@ -5,7 +5,6 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@ang
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ClientFormService } from './client-form.service';
-import {MatStepperModule} from '@angular/material/stepper';
 
 
 /** @title Checkboxes with reactive forms */
@@ -53,6 +52,11 @@ export class ClientFormComponent implements OnInit {
       {type: 'minlength', message: 'Name must be at least 2 characters long'},
       {type: 'maxlength', message: 'Name cannot be more than 50 characters long'},
     ],
+    household: [
+      {type: 'required', message: 'Household size is required'},
+      {type: 'min', message: 'Household size must be greater than 0'},
+      {type: 'max', message: 'Household size must be less than 21'}
+    ]
   };
 
   constructor(private formBuilder: FormBuilder, private fb: UntypedFormBuilder,
@@ -70,6 +74,29 @@ export class ClientFormComponent implements OnInit {
       ])),
     });
 
+  }
+
+  validateHousehold1() {
+
+  }
+
+  validateHousehold2() {
+    if (typeof this !== "number") {
+      return {
+        ok: false,
+        message: 'please enter a number'
+      };
+    } else if (this < 1) {
+      return {
+        ok: false,
+        message: 'please enter a number greater than 0'
+      };
+    } else if (this > 21) {
+      return {
+        ok: false,
+        message: 'please enter a number less than 21'
+      };
+    }
   }
 
   ngOnInit() {
