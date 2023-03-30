@@ -5,6 +5,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@ang
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ClientFormService } from './client-form.service';
+import { RequestService } from '../requests/request.service';
 
 
 /** @title Checkboxes with reactive forms */
@@ -40,7 +41,6 @@ export class ClientFormComponent implements OnInit {
     laundryDetergent: false, disinfectingWipes: false,
   });
 
-
   addRequestForm: UntypedFormGroup;
   firstFormGroup: FormGroup = this.formBuilder.group({firstCtrl: ['']});
   secondFormGroup: FormGroup = this.formBuilder.group({secondCtrl: ['']});
@@ -60,7 +60,8 @@ export class ClientFormComponent implements OnInit {
   };
 
   constructor(private formBuilder: FormBuilder, private fb: UntypedFormBuilder,
-   private requestFormService: ClientFormService, private snackBar: MatSnackBar, private router: Router){}
+   private requestFormService: ClientFormService, private snackBar: MatSnackBar, private router: Router,
+   private requestService: RequestService){}
 
   createForms() {
 
@@ -120,6 +121,24 @@ export class ClientFormComponent implements OnInit {
 
 
   submitForm() {
+    this.requestService.addRequest(this.addRequestForm.value).subscribe({
+      next: (newId) => {
+        this.snackBar.open(
+          `Request successfully submitted`,
+          null,
+          { duration: 2000 }
+        );
+        this.router.navigate(['/requests', newId]);
+      },
+      error: err => {
+        this.snackBar.open(
+          `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
+          'OK',
+          { duration: 5000 }
+        );
+      },
+      // complete: () => console.log('Add user completes!')
+    });
   }
 
 }
