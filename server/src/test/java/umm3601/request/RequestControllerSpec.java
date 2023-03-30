@@ -185,7 +185,6 @@ class RequestControllerSpec {
     // Specifically, we want to pay attention to the ArrayList<User> that is passed as input
     // when ctx.json is called --- what is the argument that was passed? We capture it and can refer to it later
     verify(ctx).json(requestArrayListCaptor.capture());
-    System.out.println(requestArrayListCaptor.getValue());
     verify(ctx).status(HttpStatus.OK);
 
     // Check that the database collection holds the same number of documents as the size of the captured List<User>

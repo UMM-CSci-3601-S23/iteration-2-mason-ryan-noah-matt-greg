@@ -151,8 +151,7 @@ class ItemControllerSpec {
   void canGetAllItems() throws IOException {
     // When something asks the (mocked) context for the queryParamMap,
     // it will return an empty map (since there are no query params in this case where we want all users)
-    Map<String, List<String>> queryParams = new HashMap<>();
-    when(ctx.queryParamMap()).thenReturn(queryParams);
+    when(ctx.queryParamMap()).thenReturn(Collections.emptyMap());
 
     // Now, go ahead and ask the userController to getUsers
     // (which will, indeed, ask the context for its queryParamMap)
@@ -170,10 +169,10 @@ class ItemControllerSpec {
     // Specifically, we want to pay attention to the ArrayList<User> that is passed as input
     // when ctx.json is called --- what is the argument that was passed? We capture it and can refer to it later
     verify(ctx).json(itemArrayListCaptor.capture());
-    System.out.println(itemArrayListCaptor.getValue());
     verify(ctx).status(HttpStatus.OK);
 
     // Check that the database collection holds the same number of documents as the size of the captured List<User>
+    System.out.println(db.getCollection("items").countDocuments());
     assertEquals(db.getCollection("items").countDocuments(), itemArrayListCaptor.getValue().size());
   }
   @Test
@@ -196,5 +195,28 @@ class ItemControllerSpec {
     }
   }
 
+  @Test
+  void addItem() throws IOException {
+    String testNewItem = "{"
+        + "\"itemType\": \"food\","
+        + "\"foodType\": \"meat\""
+        + "}";
+    when(ctx.bodyValidator(Request.class))
+      .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));
 
+    requestController.addNewRequest(ctx);
+    verify(ctx).json(mapCaptor.capture());
+
+    // Our status should be 201, i.e., our new user was successfully created.
+    verify(ctx).status(HttpStatus.CREATED);
+
+    //Verify that the request was added to the database with the correct ID
+    Document addedRequest = db.getCollection("requests")
+      .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
+
+    // Successfully adding the request should return the newly generated, non-empty MongoDB ID for that request.
+    assertNotEquals("", addedRequest.get("_id"));
+    assertEquals("food", addedRequest.get("itemType"));
+    assertEquals("meat", addedRequest.get("foodType"));
+  }
 }
