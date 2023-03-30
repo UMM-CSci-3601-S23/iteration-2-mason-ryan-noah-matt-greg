@@ -26,8 +26,6 @@ import java.security.NoSuchAlgorithmException;
 public class RequestController {
   static final String SORT_ORDER_KEY = "sortorder";
 
-  private static final String SORT_ORDER_REGEX = "^(oldest|newest)$";
-
   private final JacksonMongoCollection<Request> requestCollection;
 
 
