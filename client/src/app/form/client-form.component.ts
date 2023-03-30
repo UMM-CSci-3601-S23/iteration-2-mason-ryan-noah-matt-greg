@@ -54,7 +54,7 @@ export class ClientFormComponent implements OnInit {
   secondFormGroup: FormGroup = this.formBuilder.group({secondCtrl: ['']});
   isLinear = false;
 
-  addTodoValidationMessages = {
+  newRequestValidationMessages = {
     name: [
       {type: 'required', message: 'Name is required'},
       {type: 'minlength', message: 'Name must be at least 2 characters long'},
@@ -85,6 +85,43 @@ export class ClientFormComponent implements OnInit {
 
   }
 
+  formControlHasError(controlName: string): boolean {
+    return this.addRequestForm.get(controlName).invalid &&
+      (this.addRequestForm.get(controlName).dirty || this.addRequestForm.get(controlName).touched);
+  }
+
+  getErrorMessage(name: keyof typeof this.newRequestValidationMessages): string {
+    for(const {type, message} of this.newRequestValidationMessages[name]) {
+      if (this.addRequestForm.get(name).hasError(type)) {
+        return message;
+      }
+    }
+    return 'Unknown error';
+  }
+
+  // validateHousehold1() {
+
+  // }
+
+
+  // validateHousehold2() {
+  //   if (typeof this !== "number") {
+  //     return {
+  //       ok: false,
+  //       message: 'please enter a number'
+  //     };
+  //   } else if (this < 1) {
+  //     return {
+  //       ok: false,
+  //       message: 'please enter a number greater than 0'
+  //     };
+  //   } else if (this > 21) {
+  //     return {
+  //       ok: false,
+  //       message: 'please enter a number less than 21'
+  //     };
+  //   }
+  // }
 
   ngOnInit() {
     this.createForms();

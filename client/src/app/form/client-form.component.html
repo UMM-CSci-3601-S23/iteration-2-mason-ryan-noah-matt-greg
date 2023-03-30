@@ -21,11 +21,8 @@
       <mat-form-field appearance="fill">
         <mat-label>Name</mat-label>
         <input matInput placeholder="Last name, First name" formControlName="name" required>
-        <mat-error *ngFor="let validation of addTodoValidationMessages.name">
-          <mat-error class="error-message" data-test="nameError"
-                    *ngIf="addRequestForm.get('name').hasError(validation.type) && (addRequestForm.get('name').dirty || addRequestForm.get('name').touched)">
-            {{validation.message}}
-          </mat-error>
+        <mat-error *ngIf="formControlHasError('name')" data-test="nameDescriptionError">
+          {{getErrorMessage('name')}}
         </mat-error>
       </mat-form-field>
       <div>
