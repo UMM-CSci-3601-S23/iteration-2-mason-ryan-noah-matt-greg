@@ -325,9 +325,10 @@
           mat-button
           type="button"
           color="primary"
-          [disabled]="!addRequestForm.valid"
+          class= "submit_button"
           type="submit"
-          data-test="confirmAddTodoButton">
+          data-test="confirmAddTodoButton"
+          onClick= "submitForm()">
           Submit Request Form
         </button>
       </mat-card-actions>

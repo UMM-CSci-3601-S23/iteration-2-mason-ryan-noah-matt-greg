@@ -128,8 +128,9 @@ public class RequestController {
      *    - itemType is valid
      *    - foodType is Valid
      */
-    Request newRequest = constructNewRequest(ctx);
-
+    Request newRequest = new Request();
+    System.out.println(ctx.body());
+    //newRequest.setSelections("oknerd","nooneasked");
     requestCollection.insertOne(newRequest);
 
     ctx.json(Map.of("id", newRequest._id));
@@ -146,13 +147,8 @@ public class RequestController {
    */
   public Request constructNewRequest(Context ctx){
       Request newRequest = new Request();
-      String[] items = newRequest.formItems;
+      String[] items = ItemList.formItems;
       for(int i = 0; i < items.length; i++){
-        try{
-          newRequest.selections.put(items[i], Boolean.parseBoolean(ctx.queryParam(items[i])));
-        }catch(Exception e){
-          System.out.println(items[i] + "not requested");
-        }
       }
       return newRequest;
   }

@@ -2,7 +2,7 @@ package umm3601.request;
 
 public class ItemList {
     // Exhaustive list of items on the physical request form
-    public String[] formItems = {"glutenFree", "lowSugar", "lactoseFree", "vegetarian", "miscFresh", "appleJuice", "frozenPeaches", "mixed", "peaches", "appleSauce","dates", "carrots", "potatoes",
+    public static String[] formItems = {"glutenFree", "lowSugar", "lactoseFree", "vegetarian", "miscFresh", "appleJuice", "frozenPeaches", "mixed", "peaches", "appleSauce","dates", "carrots", "potatoes",
                                 "misc", "corn", "greenBeans", "peas", "sweetPotatoes", "spinach", "cannedCarrots", "dicedTomatoes","spaghettiSauce","groundBeef", "groundPorkBeefBlend", "plantBasedBurgers",
                                 "pizzaRanchPizza", "veggieRavioli", "chickenDrumsticks", "wholeChicken", "chickenBreast",
                                 "chickenLegQtrs", "fishSticks", "ham", "assortedMeats", "chicken", "tuna", "salmon", "pastaWithMeatSauce", "pastaInButterSauce", "cannedChili",

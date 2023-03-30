@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ClientFormService } from './client-form.service';
 import { RequestService } from '../requests/request.service';
+//import { kStringMaxLength } from 'buffer';
 
 
 /** @title Checkboxes with reactive forms */
@@ -39,6 +40,13 @@ export class ClientFormComponent implements OnInit {
     newbornGiftBag: false, diapers: false, shampoo: false, bodyOrHandSoap: false, toothpaste: false,
     toothbrushes: false, birthdayPartyKit: false, handSanitizer: false, feminineHygiene: false, dishSoap: false,
     laundryDetergent: false, disinfectingWipes: false,
+  });
+
+  foods2 = this.formBuilder.group({
+    selections: {
+      miscFreshFruit: false,
+      appleJuice: false
+    }
   });
 
   addRequestForm: UntypedFormGroup;
@@ -77,10 +85,6 @@ export class ClientFormComponent implements OnInit {
 
   }
 
-  validateHousehold1() {
-
-  }
-
 
   ngOnInit() {
     this.createForms();
@@ -88,7 +92,7 @@ export class ClientFormComponent implements OnInit {
 
 
   submitForm() {
-    this.requestService.addRequest(this.addRequestForm.value).subscribe({
+    this.requestService.addRequest(this.foods.value[3]).subscribe({
       next: (newId) => {
         this.snackBar.open(
           `Request successfully submitted`,
@@ -106,6 +110,10 @@ export class ClientFormComponent implements OnInit {
       },
       // complete: () => console.log('Add user completes!')
     });
+  }
+
+  updateList(newItem){
+    return newItem;
   }
 
 }

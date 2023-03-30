@@ -15,12 +15,9 @@ public class Request {
 
   public String _id;
 
-  // Exhaustive list of items on the physical request form
-  public ItemList itemList = new ItemList();
-  public String[] formItems = itemList.formItems;
 
   public LocalDateTime timeSubmitted;
-  public HashMap<String, Boolean> selections;
+  public String[] selections;
 
   @Override
   public boolean equals(Object obj) {
@@ -36,4 +33,7 @@ public class Request {
     return _id.hashCode();
   }
 
+  public void setSelections(String[] sel){
+    this.selections = sel;
+  }
 }

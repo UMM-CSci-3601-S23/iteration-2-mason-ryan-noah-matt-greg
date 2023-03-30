@@ -62,12 +62,7 @@ export class NewRequestComponent {
           null,
           { duration: 2000 }
         );
-        this.router.navigate(['/requests', newId]);
-      },
-      error: err => {
-        this.snackBar.open(
-          `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
-          'OK',
+        this.router.navigate(['/requests', newId]);ClientForm
           { duration: 5000 }
         );
       },
