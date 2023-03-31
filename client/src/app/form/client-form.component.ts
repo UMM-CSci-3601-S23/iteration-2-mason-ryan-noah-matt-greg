@@ -52,8 +52,6 @@ export class ClientFormComponent {
     laundryDetergent: false, disinfectingWipes: false,
   });
 
-  isLinear = false;
-
   newRequestValidationMessages = {
     name: [
       {type: 'required', message: 'Name is required'},
@@ -66,6 +64,9 @@ export class ClientFormComponent {
       {type: 'max', message: 'Household size must be less than 21'}
     ]
   };
+
+  selections: Array<string>;
+  isLinear = false;
 
   constructor(private formBuilder: FormBuilder,
     private snackBar: MatSnackBar, private router: Router, private formService: FormService){
@@ -86,35 +87,35 @@ export class ClientFormComponent {
     return 'Unknown error';
   }
 
-  // submitForm() {
-  //   const newRequest = {selections: this.selections};
-  //   this.requestService.addRequest(newRequest).subscribe({
-  //     next: (newId) => {
-  //       this.snackBar.open(
-  //         `Request successfully submitted`,
-  //         null,
-  //         { duration: 2000 }
-  //       );
-  //       this.router.navigate(['/requests', newId]);
-  //     },
-  //     error: err => {
-  //       this.snackBar.open(
-  //         `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
-  //         'OK',
-  //         { duration: 5000 }
-  //       );
-  //     },
-  //     // complete: () => console.log('Add user completes!')
-  //   });
-  // }
+  submitForm() {
+    const newRequest = {selections: this.selections};
+    this.formService.addRequest(newRequest).subscribe({
+      next: (newId) => {
+        this.snackBar.open(
+          `Request successfully submitted`,
+          null,
+          { duration: 2000 }
+        );
+        this.router.navigate(['/requests', newId]);
+      },
+      error: err => {
+        this.snackBar.open(
+          `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
+          'OK',
+          { duration: 5000 }
+        );
+      },
+      // complete: () => console.log('Add user completes!')
+    });
+  }
 
-  // updateList(newItem){
-  //   if (this.selections.includes(newItem)){
-  //     this.selections.splice(newItem);
-  //   }
-  //   else{
-  //     this.selections.push(newItem);
-  //   }
-  // }
+  updateList(newItem){
+    if (this.selections.includes(newItem)){
+      this.selections.splice(newItem);
+    }
+    else{
+      this.selections.push(newItem);
+    }
+  }
 
 }
