@@ -14,6 +14,7 @@ import io.javalin.Javalin;
 import io.javalin.plugin.bundled.RouteOverviewPlugin;
 import umm3601.request.RequestController;
 import umm3601.user.UserController;
+import umm3601.item.ItemController;
 
 public class Server {
 
@@ -43,6 +44,7 @@ public class Server {
     // Initialize dependencies
     UserController userController = new UserController(database);
     RequestController requestController = new RequestController(database);
+    ItemController itemController = new ItemController(database);
 
     Javalin server = Javalin.create(config ->
       config.plugins.register(new RouteOverviewPlugin("/api"))
@@ -84,6 +86,12 @@ public class Server {
 
     //Deleting requests
     server.delete("/api/requests/{id}]", requestController::deleteRequest);
+
+    //Adding items
+    server.post("/api/items/new", itemController::addNewItem);
+
+    //List items
+    server.get("/api/items/get", itemController::getItems);
 
 
     // This catches any uncaught exceptions thrown in the server
