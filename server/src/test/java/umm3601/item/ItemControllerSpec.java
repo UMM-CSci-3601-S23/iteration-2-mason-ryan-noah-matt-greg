@@ -172,7 +172,7 @@ class ItemControllerSpec {
     verify(ctx).status(HttpStatus.OK);
 
     // Check that the database collection holds the same number of documents as the size of the captured List<User>
-    System.out.println(db.getCollection("items").countDocuments());
+    System.out.println(itemArrayListCaptor.getValue().size());
     assertEquals(db.getCollection("items").countDocuments(), itemArrayListCaptor.getValue().size());
   }
   @Test
@@ -198,25 +198,29 @@ class ItemControllerSpec {
   @Test
   void addItem() throws IOException {
     String testNewItem = "{"
-        + "\"itemType\": \"food\","
-        + "\"foodType\": \"meat\""
+        + "\"itemName\": \"tomatoSoup\","
+        + "\"unit\": \"cans\","
+        + "\"amount\": 2"
         + "}";
-    when(ctx.bodyValidator(Request.class))
-      .then(value -> new BodyValidator<Request>(testNewRequest, Request.class, javalinJackson));
 
-    requestController.addNewRequest(ctx);
+    when(ctx.bodyValidator(Item.class))
+      .then(value -> new BodyValidator<Item>(testNewItem, Item.class, javalinJackson));
+
+    itemController.addNewItem(ctx);
     verify(ctx).json(mapCaptor.capture());
 
     // Our status should be 201, i.e., our new user was successfully created.
     verify(ctx).status(HttpStatus.CREATED);
 
     //Verify that the request was added to the database with the correct ID
-    Document addedRequest = db.getCollection("requests")
+    Document addedItem = db.getCollection("items")
       .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
-
+    System.out.println(addedItem);
     // Successfully adding the request should return the newly generated, non-empty MongoDB ID for that request.
-    assertNotEquals("", addedRequest.get("_id"));
-    assertEquals("food", addedRequest.get("itemType"));
-    assertEquals("meat", addedRequest.get("foodType"));
+    assertNotEquals("", addedItem.get("_id"));
+    assertEquals("bread", addedItem.get("itemName"));
+    assertEquals("loafs", addedItem.get("unit"));
+    assertEquals("amount", addedItem.get("113"));
+
   }
 }

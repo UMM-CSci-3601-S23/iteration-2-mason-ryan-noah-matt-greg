@@ -6,7 +6,7 @@ import org.mongojack.ObjectId;
 @SuppressWarnings({"VisibilityModifier"})
 
 public class Item {
-    @ObjectId @Id
+  @ObjectId @Id
 
   @SuppressWarnings({"MemberName"})
 
@@ -28,5 +28,17 @@ public class Item {
   @Override
   public int hashCode() {
     return _id.hashCode();
+  }
+
+  public void setItemName(String in){
+    this.itemName = in;
+  }
+
+  public void setAmount(int am){
+    this.amount = am;
+  }
+
+  public void setUnit(String un){
+    this.unit = un;
   }
 }

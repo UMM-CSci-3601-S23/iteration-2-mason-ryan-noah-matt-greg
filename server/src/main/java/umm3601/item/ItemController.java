@@ -26,7 +26,7 @@ public class ItemController {
   static final String ITEM_TYPE_KEY = "itemType";
   static final String FOOD_TYPE_KEY = "foodType";
   static final String SORT_ORDER_KEY = "sortorder";
-  private static final String ITEM_NAME_REGEX = "^(/w+)$";
+  private static final String ITEM_NAME_REGEX = "^(.*)$";
 
 
   private final JacksonMongoCollection<Item> itemCollection;
@@ -115,9 +115,24 @@ public class ItemController {
      *    - itemType is valid
      *    - foodType is Valid
      */
+
+
+    /*Method 2:
+    Item newItem = new Item();
+    newItem.setAmount(Integer.parseInt(ctx.queryParam("amount")));
+    newItem.setItemName(ctx.queryParam("itemName"));
+    newItem.setUnit(ctx.queryParam("unit"));
+    */
+
+    //Method 1:
     Item newItem = ctx.bodyValidator(Item.class)
-      .check(req -> req.itemName.matches(ITEM_NAME_REGEX), "Item must contain valid item name").get();
+      .check(req -> req.itemName.matches(ITEM_NAME_REGEX), "Item must contain valid item name")
+      .check(req -> req.unit.matches(ITEM_NAME_REGEX), "Unit must contain a valid string")
+      .check(req -> req.amount >= 0 , "Amount cannot be negative").get();
+
+
     itemCollection.insertOne(newItem);
+
 
     ctx.json(Map.of("id", newItem._id));
     // 201 is the HTTP code for when we successfully
@@ -125,6 +140,23 @@ public class ItemController {
     // See, e.g., https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
     // for a description of the various response codes.
     ctx.status(HttpStatus.CREATED);
+  }
+
+    /**
+   * Utility function to generate the md5 hash for a given string
+   *
+   * @param str the string to generate a md5 for
+   */
+  @SuppressWarnings("lgtm[java/weak-cryptographic-algorithm]")
+  public String md5(String str) throws NoSuchAlgorithmException {
+    MessageDigest md = MessageDigest.getInstance("MD5");
+    byte[] hashInBytes = md.digest(str.toLowerCase().getBytes(StandardCharsets.UTF_8));
+
+    StringBuilder result = new StringBuilder();
+    for (byte b : hashInBytes) {
+      result.append(String.format("%02x", b));
+    }
+    return result.toString();
   }
 }
 
