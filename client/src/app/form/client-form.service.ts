@@ -10,7 +10,7 @@ import { Form } from './client-form';
 
 export class FormService {
 
-  readonly formUrl: string = `${environment.apiUrl}clientform`;
+  readonly formUrl: string = `${environment.apiUrl}requests/clientform`;
 
   private readonly foodKey = 'value';
 

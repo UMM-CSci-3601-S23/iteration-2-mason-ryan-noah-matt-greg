@@ -65,7 +65,7 @@ export class ClientFormComponent {
     ]
   };
 
-  selections: Array<string>;
+  selections: string[] = new Array();
   isLinear = false;
 
   constructor(private formBuilder: FormBuilder,
@@ -88,6 +88,7 @@ export class ClientFormComponent {
   }
 
   submitForm() {
+    console.log(this.selections);
     const newRequest = {selections: this.selections};
     this.formService.addRequest(newRequest).subscribe({
       next: (newId) => {
@@ -96,22 +97,23 @@ export class ClientFormComponent {
           null,
           { duration: 2000 }
         );
-        this.router.navigate(['/requests', newId]);
+        // this.router.navigate(['/requests', newId]);
       },
       error: err => {
         this.snackBar.open(
           `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
           'OK',
-          { duration: 5000 }
+          { duration: 20000 }
         );
       },
-      // complete: () => console.log('Add user completes!')
+      complete: () => console.log('Add user completes!')
     });
   }
 
-  updateList(newItem){
-    if (this.selections.includes(newItem)){
-      this.selections.splice(newItem);
+  updateList(newItem: string): void{
+    console.log('updating list...');
+    if (this.selections.length !== 0 && this.selections.includes(newItem)){
+      this.selections.splice(this.selections.indexOf(newItem));
     }
     else{
       this.selections.push(newItem);

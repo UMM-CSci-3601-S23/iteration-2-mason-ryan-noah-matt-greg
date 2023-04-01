@@ -80,7 +80,7 @@ public class Server {
     //List requests, filtered using query parameters
     server.get("/api/requests/donor", requestController::getRequests);
 
-    server.post("/api/requests/new", requestController::addNewRequest);
+    server.post("/api/requests/clientform", requestController::addNewRequest);
 
     //Deleting requests
     server.delete("/api/requests/{id}]", requestController::deleteRequest);

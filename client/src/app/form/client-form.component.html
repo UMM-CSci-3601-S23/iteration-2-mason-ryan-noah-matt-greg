@@ -18,9 +18,9 @@
       <ng-template matStepLabel>Fruits</ng-template>
         <section class="form-fruits-fresh" [formGroup]="form">
           <mat-card-subtitle class="fruits-fresh-subtitle">Fresh</mat-card-subtitle><br />
-          <mat-checkbox formControlName="miscFreshFruit" onchange="updateList('miscFreshFruit')">Miscellaneous Fresh Fruit as available</mat-checkbox><br />
-          <mat-checkbox formControlName="appleJuice" onchange="updateList('appleJuice')">Apple juice</mat-checkbox><br />
-          <mat-checkbox formControlName="frozenPeaches" onchange="updateList('frozenPeaches')">Frozen peaches</mat-checkbox><br />
+          <mat-checkbox formControlName="miscFreshFruit" (change)="updateList('miscFreshFruit')">Miscellaneous Fresh Fruit as available</mat-checkbox><br />
+          <mat-checkbox formControlName="appleJuice" (change)="updateList('appleJuice')">Apple juice</mat-checkbox><br />
+          <mat-checkbox formControlName="frozenPeaches" (change)="updateList('frozenPeaches')">Frozen peaches</mat-checkbox><br />
        </section>
        <div>
         <button mat-button matStepperNext>Next</button>
@@ -30,7 +30,7 @@
   <mat-step [stepControl]="form">
     <form [formGroup]="form" (ngSubmit) = "submitForm()">
       <ng-template matStepLabel>Finish</ng-template>
-      <p>Make sure you double check all the form wanted are checked. If so, submit form!</p>
+      <p>Make sure you double check all the foods wanted are checked. If so, submit form!</p>
       <mat-card-actions align="start">
         <button
           mat-button

@@ -1,7 +1,6 @@
 export interface Form {
   _id: string;
   timeSubmitted?: Date;
-  name: string;
   selections: string[];
 }
   // familySize: string;
