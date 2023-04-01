@@ -1,10 +1,11 @@
 // import {Component} from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { RequestService } from '../requests/request.service';
+//import { getSystemErrorMap } from 'util';
 //import { kStringMaxLength } from 'buffer';
 
 
@@ -20,10 +21,10 @@ export class TestNewRequestComponent  {
     miscFreshFruit: false, appleJuice: false, frozenPeaches: false
   });
 
-  selections: Array<string>;
+
   addRequestForm: UntypedFormGroup;
   isLinear = false;
-
+  selections: string[] = new Array();
 
   addTodoValidationMessages = {
     name: [
@@ -43,6 +44,7 @@ export class TestNewRequestComponent  {
    private requestService: RequestService){}
 
   submitForm() {
+    console.log(this.selections);
     const newRequest = {selections: this.selections};
     this.requestService.addRequest(newRequest).subscribe({
       next: (newId) => {
@@ -51,7 +53,7 @@ export class TestNewRequestComponent  {
           null,
           { duration: 2000 }
         );
-        this.router.navigate(['/requests', newId]);
+        //this.router.navigate(['']);
       },
       error: err => {
         this.snackBar.open(
@@ -64,9 +66,10 @@ export class TestNewRequestComponent  {
     });
   }
 
-  updateList(newItem){
-    if (this.selections.includes(newItem)){
-      this.selections.splice(newItem);
+  updateList(newItem: string): void{
+    console.log('updating list...');
+    if (this.selections.length !== 0 && this.selections.includes(newItem)){
+      this.selections.splice(this.selections.indexOf(newItem));
     }
     else{
       this.selections.push(newItem);

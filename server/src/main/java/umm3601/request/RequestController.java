@@ -129,8 +129,19 @@ public class RequestController {
      *    - foodType is Valid
      */
     Request newRequest = new Request();
-    System.out.println(ctx.body());
-    //newRequest.setSelections("oknerd","nooneasked");
+
+    // {"selections":["appleJuice","miscFreshFruit","frozenPeaches"]}
+    String try2 = ctx.body();
+    System.out.println(try2);
+    try2 = try2.replace("\"", "");
+    try2 = try2.replace("{", "");
+    try2 = try2.replace("}", "");
+    try2 = try2.replace("[", "");
+    try2 = try2.replace("]", "");
+    try2 = try2.replace("selections", "");
+    String[] selectionsExtracted = try2.split(",");
+    System.out.println(try2);
+    newRequest.setSelections(selectionsExtracted);
     requestCollection.insertOne(newRequest);
 
     ctx.json(Map.of("id", newRequest._id));
