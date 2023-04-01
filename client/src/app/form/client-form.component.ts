@@ -1,12 +1,11 @@
 // import {Component} from '@angular/core';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { ClientFormService } from './client-form.service';
-import { RequestService } from '../requests/request.service';
-//import { kStringMaxLength } from 'buffer';
+import { FormService } from './client-form.service';
+import { Form } from './client-form';
 
 
 /** @title Checkboxes with reactive forms */
@@ -16,8 +15,19 @@ import { RequestService } from '../requests/request.service';
   styleUrls: ['./client-form.component.scss']
 })
 
-export class ClientFormComponent implements OnInit {
-  foods = this.formBuilder.group({
+export class ClientFormComponent {
+
+  form = this.formBuilder.group({
+    name:['', Validators.compose([
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(50),
+    ])],
+    familySize:['', Validators.compose([
+      Validators.required,
+      Validators.min(1),
+      Validators.max(99)
+    ])],
     miscFreshFruit: false, appleJuice: false, frozenPeaches: false, mixedFruit: false, peaches: false,
     appleSauce: false, dates: false, carrots: false, miscFreshVegetables: false, corn: false,
     greenBeans: false, peas: false, sweetPotatoes: false, spinach: false, cannedCarrots: false,
@@ -42,18 +52,6 @@ export class ClientFormComponent implements OnInit {
     laundryDetergent: false, disinfectingWipes: false,
   });
 
-  foods2 = this.formBuilder.group({
-    selections: {
-      miscFreshFruit: false,
-      appleJuice: false
-    }
-  });
-
-  addRequestForm: UntypedFormGroup;
-  firstFormGroup: FormGroup = this.formBuilder.group({firstCtrl: ['']});
-  secondFormGroup: FormGroup = this.formBuilder.group({secondCtrl: ['']});
-  isLinear = false;
-
   newRequestValidationMessages = {
     name: [
       {type: 'required', message: 'Name is required'},
@@ -67,69 +65,31 @@ export class ClientFormComponent implements OnInit {
     ]
   };
 
-  constructor(private formBuilder: FormBuilder, private fb: UntypedFormBuilder,
-   private requestFormService: ClientFormService, private snackBar: MatSnackBar, private router: Router,
-   private requestService: RequestService){}
+  selections: Array<string>;
+  isLinear = false;
 
-  createForms() {
+  constructor(private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar, private router: Router, private formService: FormService){
+    }
 
-    // add todo form validations
-    this.addRequestForm = this.fb.group({
-      // We allow alphanumeric input and limit the length for name.
-      name: new UntypedFormControl('', Validators.compose([
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(50),
-      ])),
-    });
-
-  }
 
   formControlHasError(controlName: string): boolean {
-    return this.addRequestForm.get(controlName).invalid &&
-      (this.addRequestForm.get(controlName).dirty || this.addRequestForm.get(controlName).touched);
+    return this.form.get(controlName).invalid &&
+      (this.form.get(controlName).dirty || this.form.get(controlName).touched);
   }
 
   getErrorMessage(name: keyof typeof this.newRequestValidationMessages): string {
     for(const {type, message} of this.newRequestValidationMessages[name]) {
-      if (this.addRequestForm.get(name).hasError(type)) {
+      if (this.form.get(name).hasError(type)) {
         return message;
       }
     }
     return 'Unknown error';
   }
 
-  // validateHousehold1() {
-
-  // }
-
-
-  // validateHousehold2() {
-  //   if (typeof this !== "number") {
-  //     return {
-  //       ok: false,
-  //       message: 'please enter a number'
-  //     };
-  //   } else if (this < 1) {
-  //     return {
-  //       ok: false,
-  //       message: 'please enter a number greater than 0'
-  //     };
-  //   } else if (this > 21) {
-  //     return {
-  //       ok: false,
-  //       message: 'please enter a number less than 21'
-  //     };
-  //   }
-  // }
-
-  ngOnInit() {
-    this.createForms();
-  }
-
-
   submitForm() {
-    this.requestService.addRequest(this.foods.value[3]).subscribe({
+    const newRequest = {selections: this.selections};
+    this.formService.addRequest(newRequest).subscribe({
       next: (newId) => {
         this.snackBar.open(
           `Request successfully submitted`,
@@ -150,7 +110,12 @@ export class ClientFormComponent implements OnInit {
   }
 
   updateList(newItem){
-    return newItem;
+    if (this.selections.includes(newItem)){
+      this.selections.splice(newItem);
+    }
+    else{
+      this.selections.push(newItem);
+    }
   }
 
 }
