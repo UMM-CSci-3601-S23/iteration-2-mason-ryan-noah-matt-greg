@@ -1,10 +1,12 @@
 // import {Component} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { ClientFormService } from './client-form.service';
+import { FormService } from './client-form.service';
+import { Form } from './client-form';
+
 
 /** @title Checkboxes with reactive forms */
 @Component({
@@ -13,8 +15,19 @@ import { ClientFormService } from './client-form.service';
   styleUrls: ['./client-form.component.scss']
 })
 
-export class ClientFormComponent implements OnInit {
-  foods = this.formBuilder.group({
+export class ClientFormComponent {
+
+  form = this.formBuilder.group({
+    name:['', Validators.compose([
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(50),
+    ])],
+    familySize:['', Validators.compose([
+      Validators.required,
+      Validators.min(1),
+      Validators.max(99)
+    ])],
     miscFreshFruit: false, appleJuice: false, frozenPeaches: false, mixedFruit: false, peaches: false,
     appleSauce: false, dates: false, carrots: false, miscFreshVegetables: false, corn: false,
     greenBeans: false, peas: false, sweetPotatoes: false, spinach: false, cannedCarrots: false,
@@ -39,40 +52,72 @@ export class ClientFormComponent implements OnInit {
     laundryDetergent: false, disinfectingWipes: false,
   });
 
-
-  addRequestForm: UntypedFormGroup;
-
-  addTodoValidationMessages = {
+  newRequestValidationMessages = {
     name: [
       {type: 'required', message: 'Name is required'},
       {type: 'minlength', message: 'Name must be at least 2 characters long'},
       {type: 'maxlength', message: 'Name cannot be more than 50 characters long'},
     ],
+    household: [
+      {type: 'required', message: 'Household size is required'},
+      {type: 'min', message: 'Household size must be greater than 0'},
+      {type: 'max', message: 'Household size must be less than 21'}
+    ]
   };
 
-  constructor(private formBuilder: FormBuilder, private fb: UntypedFormBuilder,
-   private requestFormService: ClientFormService, private snackBar: MatSnackBar, private router: Router){}
+  selections: string[] = new Array();
+  isLinear = false;
 
-  createForms() {
+  constructor(private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar, private router: Router, private formService: FormService){
+    }
 
-    // add todo form validations
-    this.addRequestForm = this.fb.group({
-      // We allow alphanumeric input and limit the length for name.
-      name: new UntypedFormControl('', Validators.compose([
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(50),
-      ])),
-    });
 
+  formControlHasError(controlName: string): boolean {
+    return this.form.get(controlName).invalid &&
+      (this.form.get(controlName).dirty || this.form.get(controlName).touched);
   }
 
-  ngOnInit() {
-    this.createForms();
+  getErrorMessage(name: keyof typeof this.newRequestValidationMessages): string {
+    for(const {type, message} of this.newRequestValidationMessages[name]) {
+      if (this.form.get(name).hasError(type)) {
+        return message;
+      }
+    }
+    return 'Unknown error';
   }
-
 
   submitForm() {
+    console.log(this.selections);
+    const newRequest = {selections: this.selections};
+    this.formService.addRequest(newRequest).subscribe({
+      next: (newId) => {
+        this.snackBar.open(
+          `Request successfully submitted`,
+          null,
+          { duration: 2000 }
+        );
+        // this.router.navigate(['/requests', newId]);
+      },
+      error: err => {
+        this.snackBar.open(
+          `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`,
+          'OK',
+          { duration: 20000 }
+        );
+      },
+      complete: () => console.log('Add user completes!')
+    });
+  }
+
+  updateList(newItem: string): void{
+    console.log('updating list...');
+    if (this.selections.length !== 0 && this.selections.includes(newItem)){
+      this.selections.splice(this.selections.indexOf(newItem));
+    }
+    else{
+      this.selections.push(newItem);
+    }
   }
 
 }
