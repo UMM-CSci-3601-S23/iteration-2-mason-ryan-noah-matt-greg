@@ -17,6 +17,14 @@
     <form [formGroup] = "form">
       <ng-template matStepLabel>Fruits</ng-template>
         <section class="form-fruits-fresh" [formGroup]="form">
+          <ng-template matStepLabel>Fill out your name</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Last name, First name" formControlName="name" required>
+        <mat-error *ngIf="formControlHasError('name')" data-test="nameDescriptionError">
+          {{getErrorMessage('name')}}
+        </mat-error>
+      </mat-form-field><br /><br />
           <mat-card-subtitle class="fruits-fresh-subtitle">Fresh</mat-card-subtitle><br />
           <mat-checkbox formControlName="miscFreshFruit" (change)="updateList('miscFreshFruit')">Miscellaneous Fresh Fruit as available</mat-checkbox><br />
           <mat-checkbox formControlName="appleJuice" (change)="updateList('appleJuice')">Apple juice</mat-checkbox><br />
