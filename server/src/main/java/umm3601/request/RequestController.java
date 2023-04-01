@@ -26,6 +26,9 @@ import java.security.NoSuchAlgorithmException;
 public class RequestController {
   static final String SORT_ORDER_KEY = "sortorder";
 
+  private static final String SORT_ORDER_REGEX = "^(oldest|newest)$";
+
+
   private final JacksonMongoCollection<Request> requestCollection;
 
 
@@ -142,6 +145,7 @@ public class RequestController {
     String[] selectionsExtracted = try2.split(",");
     System.out.println(try2);
     newRequest.setSelections(selectionsExtracted);
+    
     requestCollection.insertOne(newRequest);
 
     ctx.json(Map.of("id", newRequest._id));
@@ -152,17 +156,7 @@ public class RequestController {
     ctx.status(HttpStatus.CREATED);
   }
 
-  /*
-   * Parses the list of request form items and adds any included in the request URL to the map stored in
-   * the request class
-   */
-  public Request constructNewRequest(Context ctx){
-      Request newRequest = new Request();
-      String[] items = ItemList.formItems;
-      for(int i = 0; i < items.length; i++){
-      }
-      return newRequest;
-  }
+
   /**
    * Delete the user specified by the `id` parameter in the request.
    *

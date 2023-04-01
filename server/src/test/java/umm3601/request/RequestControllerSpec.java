@@ -115,7 +115,11 @@ class RequestControllerSpec {
     db = mongoClient.getDatabase("test");
   }
 
-  @AfterAll
+  @AfterAll/**
+  * Tests the logic of the RequestController
+  *
+  * @throws IOException
+  */
   static void teardown() {
     db.drop();
     mongoClient.close();

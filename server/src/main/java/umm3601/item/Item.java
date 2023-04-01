@@ -1,29 +1,27 @@
-package umm3601.request;
+package umm3601.item;
 
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-
 @SuppressWarnings({"VisibilityModifier"})
 
-public class Request {
+public class Item {
   @ObjectId @Id
 
   @SuppressWarnings({"MemberName"})
 
   public String _id;
 
-  public LocalDateTime timeSubmitted;
-  public String[] selections;
+  public String itemName;
+  public int amount;
+  public String unit;
 
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof Request)) {
+    if (!(obj instanceof Item)) {
       return false;
     }
-    Request other = (Request) obj;
+    Item other = (Item) obj;
     return _id.equals((other._id));
   }
 
@@ -32,7 +30,15 @@ public class Request {
     return _id.hashCode();
   }
 
-  public void setSelections(String[] sel){
-    this.selections = sel;
+  public void setItemName(String in){
+    this.itemName = in;
+  }
+
+  public void setAmount(int am){
+    this.amount = am;
+  }
+
+  public void setUnit(String un){
+    this.unit = un;
   }
 }

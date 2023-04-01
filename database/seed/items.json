@@ -1,0 +1,66 @@
+[
+  {
+    "_id": {
+      "$oid": "588935f57546a2daea44de7c"
+    },
+    "itemName": "toothbrushes",
+    "unit": "boxes",
+    "amount": 123
+  },
+  {
+    "_id": {
+      "$oid": "588935f57546a2daea44de7c"
+    },
+    "itemName": "milk",
+    "unit": "gallons",
+    "amount": 12
+  },
+  {
+    "_id": {
+      "$oid": "588935f57546a2daea44de7c"
+    },
+    "itemName": "bread",
+    "unit": "loafs",
+    "amount": 113
+  },
+  {
+    "_id": {
+      "$oid": "588935f57546a2daea44de7c"
+    },
+    "itemName": "tomatoSoup",
+    "unit": "cans",
+    "amount": 2
+  },
+  {
+    "_id": {
+      "$oid": "588935f57546a2daea44de7c"
+    },
+    "itemName": "vegCurry",
+    "unit": "cans",
+    "amount": 15
+  },
+  {
+    "_id": {
+      "$oid": "588935f57546a2daea44de7c"
+    },
+    "itemName": "birthdayPartyKit",
+    "unit": "boxes",
+    "amount": 3
+  },
+  {
+    "_id": {
+      "$oid": "588935f57546a2daea44de7c"
+    },
+    "itemName": "toothpaste",
+    "unit": "boxes",
+    "amount": 5
+  },
+  {
+    "_id": {
+      "$oid": "588935f57546a2daea44de7c"
+    },
+    "itemName": "hotSauce",
+    "unit": "bottles",
+    "amount": 161
+  }
+]
