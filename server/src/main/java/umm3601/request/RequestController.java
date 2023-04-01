@@ -85,6 +85,7 @@ public class RequestController {
     // Set the JSON body of the response to be the list of requests returned by the database.
     // According to the Javalin documentation (https://javalin.io/documentation#context),
     // this calls result(jsonString), and also sets content type to json
+    System.out.println(matchingRequests);
     ctx.json(matchingRequests);
 
     // Explicitly set the context status to OK
@@ -105,7 +106,7 @@ public class RequestController {
       String sortOrder = ctx.queryParamAsClass(SORT_ORDER_KEY, String.class)
         .check(it -> it.matches(SORT_ORDER_REGEX), "Sort order must be 'oldest' or 'newest")
         .get();
-      filters.add(eq(SORT_ORDER_KEY));
+      filters.add(eq(SORT_ORDER_KEY, sortOrder));
     }
     */
     // Combine the list of filters into a single filtering document.

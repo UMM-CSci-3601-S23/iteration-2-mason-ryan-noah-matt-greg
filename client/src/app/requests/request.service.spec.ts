@@ -7,23 +7,18 @@ import { RequestService } from './request.service';
 
 describe('RequestService', () => {
   //small collection of test Requests
-  const testSel = new Map<string, boolean>([
-    ['bread', false],
-    ['toothpaste', true],
-    ['mealworms', false]
-  ]);
   const testRequests: Request[] = [
     {
       _id: '1',
-      selections: testSel
+      selections: ['hotSauce', 'tamales', 'tacoShells']
     },
     {
       _id: '2',
-      selections: testSel
+      selections: ['hotSauce', 'tamales', 'tacoShells']
     },
     {
       _id: '3',
-      selections: testSel
+      selections: ['hotSauce', 'tamales', 'tacoShells']
     }
   ];
 

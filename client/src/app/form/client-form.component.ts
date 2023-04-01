@@ -112,12 +112,14 @@ export class ClientFormComponent {
 
   updateList(newItem: string): void{
     console.log('updating list...');
+    console.log(this.selections);
     if (this.selections.length !== 0 && this.selections.includes(newItem)){
       this.selections.splice(this.selections.indexOf(newItem));
     }
     else{
       this.selections.push(newItem);
     }
+    console.log(this.selections);
   }
 
 }

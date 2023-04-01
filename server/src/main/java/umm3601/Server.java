@@ -80,7 +80,7 @@ public class Server {
     //Request api endpoints
 
     //List requests, filtered using query parameters
-    server.get("/api/requests/donor", requestController::getRequests);
+    server.get("/api/requests/get", requestController::getRequests);
 
     server.post("/api/requests/clientform", requestController::addNewRequest);
 
