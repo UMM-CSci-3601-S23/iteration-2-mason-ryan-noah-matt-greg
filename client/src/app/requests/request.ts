@@ -1,5 +1,6 @@
 export interface Request {
   _id: string;
-  timeSubmitted?: Date;
+  timeSubmitted?: string;
+  name?: string;
   selections: string[];
 }

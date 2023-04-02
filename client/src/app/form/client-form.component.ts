@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { FormService } from './client-form.service';
 import { Form } from './client-form';
+import { RequestService } from '../requests/request.service';
 
 
 /** @title Checkboxes with reactive forms */
@@ -18,7 +19,7 @@ import { Form } from './client-form';
 export class ClientFormComponent {
 
   form = this.formBuilder.group({
-    name:['', Validators.compose([
+    clientName:['anonymous', Validators.compose([
       Validators.required,
       Validators.minLength(2),
       Validators.maxLength(50),
@@ -53,7 +54,7 @@ export class ClientFormComponent {
   });
 
   newRequestValidationMessages = {
-    name: [
+    clientName: [
       {type: 'required', message: 'Name is required'},
       {type: 'minlength', message: 'Name must be at least 2 characters long'},
       {type: 'maxlength', message: 'Name cannot be more than 50 characters long'},
@@ -69,7 +70,7 @@ export class ClientFormComponent {
   isLinear = false;
 
   constructor(private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar, private router: Router, private formService: FormService){
+    private snackBar: MatSnackBar, private router: Router, private requestService: RequestService){
     }
 
 
@@ -90,7 +91,7 @@ export class ClientFormComponent {
   submitForm() {
     console.log(this.selections);
     const newRequest = {selections: this.selections};
-    this.formService.addRequest(newRequest).subscribe({
+    this.requestService.addRequest(newRequest).subscribe({
       next: (newId) => {
         this.snackBar.open(
           `Request successfully submitted`,

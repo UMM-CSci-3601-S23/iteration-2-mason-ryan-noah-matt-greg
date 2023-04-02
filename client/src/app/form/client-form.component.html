@@ -15,26 +15,73 @@
 <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
   <mat-step [stepControl] = "form">
     <form [formGroup] = "form">
-      <ng-template matStepLabel>Fruits</ng-template>
         <section class="form-fruits-fresh" [formGroup]="form">
-          <ng-template matStepLabel>Fill out your name</ng-template>
-      <mat-form-field appearance="fill">
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="Last name, First name" formControlName="name" required>
-        <mat-error *ngIf="formControlHasError('name')" data-test="nameDescriptionError">
-          {{getErrorMessage('name')}}
-        </mat-error>
-      </mat-form-field><br /><br />
-          <mat-card-subtitle class="fruits-fresh-subtitle">Fresh</mat-card-subtitle><br />
-          <mat-checkbox formControlName="miscFreshFruit" (change)="updateList('miscFreshFruit')">Miscellaneous Fresh Fruit as available</mat-checkbox><br />
-          <mat-checkbox formControlName="appleJuice" (change)="updateList('appleJuice')">Apple juice</mat-checkbox><br />
-          <mat-checkbox formControlName="frozenPeaches" (change)="updateList('frozenPeaches')">Frozen peaches</mat-checkbox><br />
+          <ng-template matStepLabel>Fill out your name </ng-template>
+            <mat-form-field appearance="fill">
+              <mat-label>Name</mat-label>
+                <input matInput placeholder="Name/Nombre" formControlName="clientName" required>
+                  <mat-error *ngIf="formControlHasError('clientName')" data-test="nameDescriptionError">
+                  {{getErrorMessage('clientName')}}
+                  </mat-error>
+            </mat-form-field><br /><br />
        </section>
        <div>
         <button mat-button matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
+
+  <mat-step [stepControl] = "form">
+    <form [formGroup] = "form">
+      <ng-template matStepLabel>FRUITS / FRUTAS  </ng-template>
+        <section class="form-fruits-fresh" [formGroup]="form">
+          <mat-card-subtitle class="fruits-fresh-subtitle">Fresh / Fresca</mat-card-subtitle>
+          <mat-checkbox formControlName="miscFreshFruit" (change)="updateList('miscFreshFruit')">Misc Fresh Fruit as available / Varios frutas frescas como disponible</mat-checkbox><br />
+          <mat-checkbox formControlName="appleJuice" (change)="updateList('appleJuice')">Apple juice / Jugo de manzana</mat-checkbox><br />
+          <mat-checkbox formControlName="frozenPeaches" (change)="updateList('frozenPeaches')">Frozen peaches / Duraznos congelados</mat-checkbox><br />
+       </section>
+       <section class="form-fruits-fresh" [formGroup]="form">
+        <mat-card-subtitle class="fruits-fresh-subtitle">Canned / En Lata</mat-card-subtitle>
+        <mat-checkbox formControlName="mixedFruit" (change)="updateList('mixedFruit')">Mixed fruit / Mix de fruta</mat-checkbox><br />
+        <mat-checkbox formControlName="peaches" (change)="updateList('peaches')">Peaches / Duraznos</mat-checkbox><br />
+        <mat-checkbox formControlName="appleSauce" (change)="updateList('appleSauce')">Apple Sauce / Puré de manzana</mat-checkbox><br />
+      </section>
+      <section class="form-fruits-fresh" [formGroup]="form">
+        <mat-card-subtitle class="fruits-fresh-subtitle">Dried / Seca </mat-card-subtitle>
+        <mat-checkbox formControlName="dates" (change)="updateList('dates')">Dates (whole OR pieces) / Dátiles (enteros O piezas)</mat-checkbox><br />
+      </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl] = "form">
+    <form [formGroup] = "form">
+      <ng-template matStepLabel>VEGETABLES / VERDURAS</ng-template>
+        <section class="form-fruits-fresh" [formGroup]="form">
+          <mat-card-subtitle class="fruits-fresh-subtitle">Fresh / Fresca</mat-card-subtitle>
+          <mat-checkbox formControlName="miscFreshFruit" (change)="updateList('miscFreshFruit')">Carrots / Zanahorias</mat-checkbox><br />
+          <mat-checkbox formControlName="appleJuice" (change)="updateList('appleJuice')">Potatoes / Papas</mat-checkbox><br />
+          <mat-checkbox formControlName="frozenPeaches" (change)="updateList('frozenPeaches')">Misc veggies as available / Varias verduras como disponible</mat-checkbox><br />
+       </section>
+       <section class="form-fruits-fresh" [formGroup]="form">
+        <mat-card-subtitle class="fruits-fresh-subtitle">Canned / En Lata</mat-card-subtitle>
+        <mat-checkbox formControlName="mixedFruit" (change)="updateList('mixedFruit')">Corn / Elote</mat-checkbox><br />
+        <mat-checkbox formControlName="peaches" (change)="updateList('peaches')">Green beans / Ejotes</mat-checkbox><br />
+        <mat-checkbox formControlName="mixedFruit" (change)="updateList('mixedFruit')">Peas / Chicharitos</mat-checkbox><br />
+        <mat-checkbox formControlName="mixedFruit" (change)="updateList('mixedFruit')">Sweet Potatoes / Papas dulces</mat-checkbox><br />
+        <mat-checkbox formControlName="peaches" (change)="updateList('peaches')">Spinach / Espinaca</mat-checkbox><br />
+        <mat-checkbox formControlName="mixedFruit" (change)="updateList('mixedFruit')">Carrots / Zanahorias</mat-checkbox><br />
+        <mat-checkbox formControlName="peaches" (change)="updateList('peaches')">Diced Tomatoes / Jitomates en lata</mat-checkbox><br />
+        <mat-checkbox formControlName="mixedFruit" (change)="updateList('mixedFruit')">Spaghetti sauce/ Salsa para espagueti </mat-checkbox><br />
+      </section>
+       <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
   <mat-step [stepControl]="form">
     <form [formGroup]="form" (ngSubmit) = "submitForm()">
       <ng-template matStepLabel>Finish</ng-template>
