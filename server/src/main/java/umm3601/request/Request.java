@@ -3,7 +3,6 @@ package umm3601.request;
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @SuppressWarnings({"VisibilityModifier"})
@@ -15,7 +14,7 @@ public class Request {
 
   public String _id;
 
-  public LocalDateTime timeSubmitted;
+  public String timeSubmitted;
   public String[] selections;
 
   @Override
