@@ -10,17 +10,17 @@ import { map } from 'rxjs/operators';
 })
 export class RequestService {
   // The URL for the requests part of the server API
-  readonly requestUrl: string = `${environment.apiUrl}requests/donor`;
+  readonly requestUrl: string = `${environment.apiUrl}requests/get`;
   readonly newRequestUrl: string = `${environment.apiUrl}requests/new`;
   private readonly selKey = 'selections';
   constructor(private httpClient: HttpClient) {
   }
 
-  getRequests(filters?: {selections?: Map<string, boolean>}): Observable<Request[]> {
+  getRequests(filters?: {name?: string}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
-      if (filters.selections) {
-        httpParams = httpParams.set(this.selKey, filters.selections.get('bread'));
+      if (filters.name) {
+        httpParams = httpParams.set('name', filters.name);
       }
     }
     return this.httpClient.get<Request[]>(this.requestUrl, {
