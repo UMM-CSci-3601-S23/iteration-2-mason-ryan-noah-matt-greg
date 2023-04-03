@@ -1,21 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject, takeUntil } from 'rxjs';
-import { Request } from './request';
-import { RequestService } from './request.service';
-import { ItemMap } from '../item-map';
-
-
-@Component({
-  selector: 'app-request-volunteer',
-  templateUrl: './request-volunteer.component.html',
-  styleUrls: ['./request-volunteer.component.scss'],
-  providers: []
-})
-
-export class RequestVolunteerComponent implements OnInit, OnDestroy {
-  public serverFilteredRequests: Request[];
-  public filteredRequests: Request[];
+export class ItemMap {
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],
     ['lowSugar','Low Sugar'],
@@ -130,58 +113,10 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
     ['laundryDetergent','Laundry detergent'],
     ['disinfectingWipes', 'Disinfecting wipes']
   ]);
-  private ngUnsubscribe = new Subject<void>();
 
-  constructor(private requestService: RequestService, private snackBar: MatSnackBar) {
-  }
-  //Gets the requests from the server with the correct filters
-  getRequestsFromServer(): void {
-    this.requestService.getRequests({
-    }).pipe(
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe({
-      next: (returnedRequests) => {
-        this.serverFilteredRequests = this.makeSelectionsReadable(returnedRequests);
-      },
-
-      error: (err) => {
-        let message = '';
-        if (err.error instanceof ErrorEvent) {
-          message = `Problem in the client – Error: {err.error.message}`;
-        } else {
-          message = `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`;
-        }
-        this.snackBar.open(
-          message,
-          'OK',
-          {duration: 5000});
-      },
-    });
-  }
-  //
-  public updateFilter(): void {
-    this.filteredRequests = this.serverFilteredRequests;
-  }
-
-  public makeSelectionsReadable(requestList: Request[]): Request[]{
-    const items = this.itemMap;
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < requestList.length; i++){
-      for (let ii = 0; ii < requestList[i].selections.length; ii++){
-        console.log(requestList[i].selections[ii]);
-        requestList[i].selections[ii] = items.get(requestList[i].selections[ii]);
-      }
-    }
-    return requestList;
-  }
-
-  ngOnInit(): void {
-      this.getRequestsFromServer();
-      console.log(this.serverFilteredRequests);
-  }
-
-  ngOnDestroy(): void {
-      this.ngUnsubscribe.next();
-      this.ngUnsubscribe.complete();
+  public getItemMap(): Map<string, string>{
+    return this.itemMap;
   }
 }
+
+
