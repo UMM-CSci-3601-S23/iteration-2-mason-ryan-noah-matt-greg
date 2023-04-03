@@ -13,8 +13,7 @@ const routes: Routes = [
   {path: '', component: HomeComponent, title: 'Home'},
   {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
   {path: 'requests/volunteer', component: RequestVolunteerComponent, title: 'Volunteer View'},
-  {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
-  {path: 'requests/clientform', component: ClientFormComponent, title: 'Client Form'}
+  {path: 'requests/client', component: ClientFormComponent, title: 'Client View'}
 
 ];
 
