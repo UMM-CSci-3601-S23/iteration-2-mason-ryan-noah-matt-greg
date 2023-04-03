@@ -32,7 +32,6 @@ import { HomeComponent } from './home/home.component';
 import { RequestDonorComponent } from './requests/request-donor.component';
 import { RequestVolunteerComponent } from './requests/request-volunteer.component';
 import { ClientFormComponent } from './form/client-form.component';
-import { TestNewRequestComponent } from './test-new-request/test-new-request.component';
 
 
 
@@ -65,7 +64,6 @@ const MATERIAL_MODULES: any[] = [
     RequestDonorComponent,
     RequestVolunteerComponent,
     ClientFormComponent,
-    TestNewRequestComponent,
   ],
   imports: [
     BrowserModule,

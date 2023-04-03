@@ -4,7 +4,6 @@ import { ClientFormComponent } from './form/client-form.component';
 import { HomeComponent } from './home/home.component';
 import { RequestDonorComponent } from './requests/request-donor.component';
 import { RequestVolunteerComponent } from './requests/request-volunteer.component';
-import { TestNewRequestComponent } from './test-new-request/test-new-request.component';
 
 
 // Note that the 'users/new' route needs to come before 'users/:id'.
