@@ -10,7 +10,7 @@ import { Form } from './client-form';
 
 export class FormService {
 
-  readonly formUrl: string = `${environment.apiUrl}requests/clientform`;
+  readonly formUrl: string = `${environment.apiUrl}form/add`;
 
   private readonly foodKey = 'value';
 
@@ -20,5 +20,4 @@ export class FormService {
     // Send post request to add a new Request with the Request data as the body.
     return this.httpClient.post<{id: string}>(this.formUrl, newForm).pipe(map(res => res.id));
   }
-
 }

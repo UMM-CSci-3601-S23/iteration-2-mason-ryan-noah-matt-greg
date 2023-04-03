@@ -1,4 +1,4 @@
-package umm3601.request;
+package umm3601.form;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
@@ -23,20 +23,20 @@ import io.javalin.http.NotFoundResponse;
 import java.security.NoSuchAlgorithmException;
 
 
-public class RequestController {
+public class FormController {
   static final String SORT_ORDER_KEY = "sortorder";
 
   private static final String SORT_ORDER_REGEX = "^(oldest|newest)$";
 
 
-  private final JacksonMongoCollection<Request> requestCollection;
+  private final JacksonMongoCollection<Form> requestCollection;
 
 
-  public RequestController(MongoDatabase database) {
+  public FormController(MongoDatabase database) {
     requestCollection = JacksonMongoCollection.builder().build(
       database,
       "requests",
-      Request.class,
+      Form.class,
       UuidRepresentation.STANDARD);
   }
 
@@ -48,7 +48,7 @@ public class RequestController {
    */
   public void getRequest(Context ctx) {
     String id = ctx.pathParam("id");
-    Request request;
+    Form request;
 
     try {
       request = requestCollection.find(eq("_id", new ObjectId(id))).first();
@@ -69,7 +69,7 @@ public class RequestController {
    *
    * @param ctx a Javalin HTTP context
    */
-  public void getRequests(Context ctx) {
+  public void getForms(Context ctx) {
     Bson combinedFilter = constructFilter(ctx);
     Bson sortingOrder = constructSortingOrder(ctx);
 
@@ -77,7 +77,7 @@ public class RequestController {
     // database system. So MongoDB is going to find the requests with the specified
     // properties, return those sorted in the specified manner, and put the
     // results into an initially empty ArrayList.
-    ArrayList<Request> matchingRequests = requestCollection
+    ArrayList<Form> matchingRequests = requestCollection
       .find(combinedFilter)
       .sort(sortingOrder)
       .into(new ArrayList<>());
@@ -124,7 +124,7 @@ public class RequestController {
     return sortingOrder;
   }
 
-  public void addNewRequest(Context ctx) {
+  public void addNewForm(Context ctx) {
     /*
      * The follow chain of statements uses the Javalin validator system
      * to verify that instance of `Request` provided in this context is
@@ -132,7 +132,7 @@ public class RequestController {
      *    - itemType is valid
      *    - foodType is Valid
      */
-    Request newRequest = new Request();
+    Form newRequest = new Form();
 
     // {"selections":["appleJuice","miscFreshFruit","frozenPeaches"]}
     String try2 = ctx.body();
@@ -146,7 +146,7 @@ public class RequestController {
     String[] selectionsExtracted = try2.split(",");
     System.out.println(try2);
     newRequest.setSelections(selectionsExtracted);
-    
+
     requestCollection.insertOne(newRequest);
 
     ctx.json(Map.of("id", newRequest._id));
@@ -164,7 +164,7 @@ public class RequestController {
    * @param ctx a Javalin HTTP context
    */
 
-  public void deleteRequest(Context ctx) {
+  public void deleteForm(Context ctx) {
     String id = ctx.pathParam("id");
     DeleteResult deleteResult = requestCollection.deleteOne(eq("_id", new ObjectId(id)));
     if (deleteResult.getDeletedCount() != 1) {

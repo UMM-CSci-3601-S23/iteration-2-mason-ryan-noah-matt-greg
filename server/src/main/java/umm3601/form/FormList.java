@@ -1,6 +1,6 @@
-package umm3601.request;
+package umm3601.form;
 
-public class ItemList {
+public class FormList {
     // Exhaustive list of items on the physical request form
     public String[] formItems = {"glutenFree", "lowSugar", "lactoseFree", "vegetarian", "miscFresh", "appleJuice", "frozenPeaches", "mixed", "peaches", "appleSauce","dates", "carrots", "potatoes",
 
