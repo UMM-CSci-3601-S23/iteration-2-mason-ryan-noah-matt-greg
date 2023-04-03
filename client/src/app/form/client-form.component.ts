@@ -42,15 +42,16 @@ export class ClientFormComponent {
     walnuts: false, crackers: false, cookies: false, miscSnacks: false, rice: false,
     stuffingMix: false, pancakeMix: false, quickOats: false, readyToEatCereal: false, elbowNoodles: false,
     macaroniAndCheese: false, pennePasta: false, instantPastaOrRice: false, bread: false, hamburgerBuns: false,
-    hotDogBuns: false, bakedGoods: false, freshMilk: false, miscellaneousDairyProducts: false, cheese: false,
+    hotDogBuns: false, bakedGoods: false, freshMilk: false, miscDairyProducts: false, cheese: false,
     yogurt: false, butter: false, shelfStableMilk: false, bakingMix: false, cakeMix: false,
-    flour: false, muffinMix: false, cookieMix: false, miscellaneousBakingItems: false, vegetableOil: false,
-    chickenNoodleSoup: false, tomatoSoup: false, vegetableSoup: false, creamyCannedSoup: false, miscellaneousSoup: false,
+    flour: false, muffinMix: false, cookieMix: false, miscBakingItems: false, vegetableOil: false,
+    chickenNoodleSoup: false, tomatoSoup: false, vegetableSoup: false, creamyCannedSoup: false, miscSoup: false,
     seasonings: false, hotSauce: false, saladDressing: false, ranchDressing: false, mustard: false,
-    syrup: false, miscellaneousPicklesOlivesETC: false, fruitOrVegetablePuree: false, babyCereal: false, formula: false,
+    syrup: false, miscPickled: false, fruitOrVegetablePuree: false, babyCereal: false, formula: false,
     newbornGiftBag: false, diapers: false, shampoo: false, bodyOrHandSoap: false, toothpaste: false,
     toothbrushes: false, birthdayPartyKit: false, handSanitizer: false, feminineHygiene: false, dishSoap: false,
     laundryDetergent: false, disinfectingWipes: false,
+    diaperSize: 0,
   });
 
   newRequestValidationMessages = {
@@ -68,6 +69,7 @@ export class ClientFormComponent {
 
   selections: string[] = new Array();
   isLinear = false;
+  diapers = false;
 
   constructor(private formBuilder: FormBuilder,
     private snackBar: MatSnackBar, private router: Router, private requestService: RequestService){
@@ -111,9 +113,18 @@ export class ClientFormComponent {
     });
   }
 
+  updateDiapers(): void{
+    if (this.diapers){
+      this.diapers = false;
+    }
+    else {this.diapers = true;}
+  }
   updateList(newItem: string): void{
     console.log('updating list...');
     console.log(this.selections);
+    if (newItem === 'diapers'){
+      this.updateDiapers();
+    }
     if (this.selections.length !== 0 && this.selections.includes(newItem)){
       this.selections.splice(this.selections.indexOf(newItem));
     }
