@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ClientFormComponent } from './form/client-form.component';
 import { HomeComponent } from './home/home.component';
+import { InventoryComponent } from './inventory/inventory.component';
 import { RequestDonorComponent } from './requests/request-donor.component';
 import { RequestVolunteerComponent } from './requests/request-volunteer.component';
 import { TestNewRequestComponent } from './test-new-request/test-new-request.component';
@@ -15,7 +16,8 @@ const routes: Routes = [
   {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
   {path: 'requests/volunteer', component: RequestVolunteerComponent, title: 'Volunteer View'},
   {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
-  {path: 'requests/clientform', component: ClientFormComponent, title: 'Client Form'}
+  {path: 'requests/clientform', component: ClientFormComponent, title: 'Client Form'},
+  {path: 'inventory/volunteer', component: InventoryComponent, title: 'Inventory'}
 
 ];
 
