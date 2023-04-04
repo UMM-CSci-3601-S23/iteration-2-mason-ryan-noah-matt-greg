@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Item } from './item';
+
 
 @Component({
   selector: 'app-inventory-card',
@@ -6,6 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./inventory-card.component.scss']
 })
 export class InventoryCardComponent {
-inventory: any;
+  @Input() item: Item;
+  @Input() simple?= false;
 
 }
