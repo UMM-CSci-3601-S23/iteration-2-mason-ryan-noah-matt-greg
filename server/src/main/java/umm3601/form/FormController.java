@@ -30,7 +30,7 @@ public class FormController {
   public FormController(MongoDatabase database) {
     requestCollection = JacksonMongoCollection.builder().build(
       database,
-      "requests",
+      "forms",
       Form.class,
       UuidRepresentation.STANDARD);
   }

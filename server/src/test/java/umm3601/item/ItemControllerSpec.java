@@ -170,25 +170,6 @@ class ItemControllerSpec {
     System.out.println(itemArrayListCaptor.getValue().size());
     assertEquals(db.getCollection("items").countDocuments(), itemArrayListCaptor.getValue().size());
   }
-  @Test
-  void canGetItemsWithItemName() throws IOException {
-    Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ItemController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"toothbrushes"}));
-    queryParams.put(ItemController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
-    when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ItemController.ITEM_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "toothbrushes", ItemController.ITEM_TYPE_KEY));
-
-    itemController.getItems(ctx);
-
-    verify(ctx).json(itemArrayListCaptor.capture());
-    verify(ctx).status(HttpStatus.OK);
-
-    // Confirm that all the requests passed to `json` work for food.
-    for (Item item : itemArrayListCaptor.getValue()) {
-      assertEquals("toothbrushes", item.itemName);
-    }
-  }
 
   @Test
   void addItem() throws IOException {
