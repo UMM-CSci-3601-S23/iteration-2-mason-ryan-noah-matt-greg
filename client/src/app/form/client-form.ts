@@ -1,6 +1,10 @@
 export interface Form {
   _id: string;
-  timeSubmitted?: Date;
+
+  timeSubmitted?: string;
+  name?: string;
+  diaperSize?: string;
+
   selections: string[];
 }
 

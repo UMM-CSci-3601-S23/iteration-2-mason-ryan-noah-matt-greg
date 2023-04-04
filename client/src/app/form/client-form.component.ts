@@ -48,6 +48,7 @@ export class ClientFormComponent {
   selections: string[] = new Array();
   isLinear = false;
   diapers = false;
+  diaperSize = '1';
 
   constructor(private formBuilder: FormBuilder,
     private snackBar: MatSnackBar, private router: Router, private requestService: RequestService){
@@ -69,8 +70,11 @@ export class ClientFormComponent {
   }
 
   submitForm() {
-    console.log(this.selections);
-    const newRequest = {selections: this.selections};
+    const date: Date = new Date();
+    const myDate: string = (date.getFullYear().toString() + date.getMonth().toString() + date.getDate().toString());
+    console.log(myDate);
+    const newRequest = {selections: this.selections, timeSubmitted: myDate, name: this.form.get('clientName').getRawValue()};
+    console.log(newRequest);
     this.requestService.addRequest(newRequest).subscribe({
       next: (newId) => {
         this.snackBar.open(

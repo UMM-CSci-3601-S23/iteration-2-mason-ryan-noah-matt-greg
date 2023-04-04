@@ -132,9 +132,9 @@ public class FormController {
      *    - itemType is valid
      *    - foodType is Valid
      */
-    Form newRequest = new Form();
+    Form newRequest = ctx.bodyAsClass(Form.class);
 
-    // {"selections":["appleJuice","miscFreshFruit","frozenPeaches"]}
+    /*
     String try2 = ctx.body();
     System.out.println(try2);
     try2 = try2.replace("\"", "");
@@ -146,6 +146,7 @@ public class FormController {
     String[] selectionsExtracted = try2.split(",");
     System.out.println(try2);
     newRequest.setSelections(selectionsExtracted);
+    */
 
     requestCollection.insertOne(newRequest);
 

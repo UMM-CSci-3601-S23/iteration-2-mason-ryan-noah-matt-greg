@@ -14,6 +14,8 @@ public class Form {
 
   public String timeSubmitted;
   public String[] selections;
+  public String name;
+  public String diaperSize;
 
   @Override
   public boolean equals(Object obj) {
