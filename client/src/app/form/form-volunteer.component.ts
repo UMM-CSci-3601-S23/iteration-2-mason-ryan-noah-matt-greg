@@ -3,7 +3,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
 import { Request } from '../requests/request';
 import { RequestService } from '../requests/request.service';
-import { ItemMap } from '../item-map';
 
 
 @Component({
