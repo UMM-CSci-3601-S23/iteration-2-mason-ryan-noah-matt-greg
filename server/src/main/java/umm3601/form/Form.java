@@ -31,7 +31,7 @@ public class Form {
     return _id.hashCode();
   }
 
-  public void setSelections(String[] sel){
+  public void setSelections(String[] sel) {
     this.selections = sel;
   }
 }

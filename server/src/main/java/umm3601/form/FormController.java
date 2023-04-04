@@ -96,7 +96,8 @@ public class FormController {
     // as the field to sort by, and the query param `sortorder` (default
     // "asc") to specify the sort order.
     String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "newest");
-    Bson sortingOrder = sortOrder.equals("newest") ?
+    Bson sortingOrder = sortOrder.equals("newest")
+    ?
     Sorts.descending("timeSubmitted") : Sorts.ascending("timeSubmitted");
     return sortingOrder;
   }
