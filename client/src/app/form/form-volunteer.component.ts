@@ -15,6 +15,7 @@ import { RequestService } from '../requests/request.service';
 export class RequestVolunteerComponent implements OnInit, OnDestroy {
   public serverFilteredRequests: Request[];
   public filteredRequests: Request[];
+  public sortOrder: string;
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],
     ['lowSugar','Low Sugar'],
@@ -136,6 +137,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   //Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
     this.requestService.getRequests({
+      sortOrder: this.sortOrder,
     }).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
@@ -167,6 +169,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < requestList.length; i++){
       const tempTime = requestList[i].timeSubmitted;
+      console.log(tempTime);
       requestList[i].timeSubmitted = 'submitted a request on: ' + tempTime.substring(0, 4) + '-' +
       tempTime.substring(4, 6) + '-' + tempTime.substring(6, 8);
       for (let ii = 0; ii < requestList[i].selections.length; ii++){

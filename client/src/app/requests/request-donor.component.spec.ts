@@ -13,11 +13,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Observable } from 'rxjs';
-import { MockRequestService } from 'src/testing/request.service.mock';
-import { Request } from './request';
-import { RequestDonorComponent } from './request-donor.component';
-import { RequestService } from './request.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
@@ -40,69 +35,8 @@ const COMMON_IMPORTS: unknown[] = [
   RouterTestingModule,
 ];
 
-describe('Donor Request View', () => {
-  let donorList: RequestDonorComponent;
-  let fixture: ComponentFixture<RequestDonorComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [COMMON_IMPORTS],
-      declarations: [RequestDonorComponent],
-      providers: [{ provide: RequestService, useValue: new MockRequestService() }]
-    });
-  });
-
-  beforeEach(waitForAsync (() => {
-    TestBed.compileComponents().then(() => {
-      fixture = TestBed.createComponent(RequestDonorComponent);
-      donorList = fixture.componentInstance;
-      fixture.detectChanges();
-    });
-  }));
-
-  it('contains all requests', () => {
-    expect(donorList.serverFilteredRequests.length).toBe(4);
-  });
-
-
-});
 
 describe('Misbehaving Donor view', () => {
-  let donorList: RequestDonorComponent;
-  let fixture: ComponentFixture<RequestDonorComponent>;
 
-  let requestServiceStub: {
-    getRequests: () => Observable<Request[]>;
-  };
-
-  beforeEach(() => {
-    requestServiceStub = {
-      getRequests: () => new Observable(observer => {
-        observer.error('getRequests() Observer generates an error');
-      })
-    };
-
-    TestBed.configureTestingModule({
-      imports: [COMMON_IMPORTS],
-      declarations: [RequestDonorComponent],
-      providers: [{provide: RequestService, useValue: requestServiceStub}]
-    });
-  });
-
-  beforeEach(waitForAsync(() => {
-    TestBed.compileComponents().then(() => {
-      fixture = TestBed.createComponent(RequestDonorComponent);
-      donorList = fixture.componentInstance;
-      fixture.detectChanges();
-    });
-  }));
-
-  it('generates an error if we don\'t set up a RequestDonorService', () => {
-    expect(donorList.serverFilteredRequests).toBeUndefined();
-  });
-
-  it('updateFilter properly reassigns our request list', ()=>{
-    donorList.updateFilter();
-    expect(donorList.filteredRequests === donorList.serverFilteredRequests).toBeTruthy();
-  });
 });

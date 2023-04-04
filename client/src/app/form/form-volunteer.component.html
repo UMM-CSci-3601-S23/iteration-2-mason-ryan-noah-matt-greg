@@ -16,7 +16,7 @@
       <div class="flex-row gap-8 flex-wrap">
         <mat-form-field class="">
           <mat-label>Sort by:</mat-label>
-          <mat-select (selectionChange)="getRequestsFromServer()" data-test="requestItemTypeSelect">
+          <mat-select [(ngModel)]="sortOrder" (selectionChange)="getRequestsFromServer()" data-test="requestItemTypeSelect">
             <mat-option>--</mat-option>
             <mat-option value="oldest">Oldest</mat-option>
             <mat-option value="newest">Newest</mat-option>

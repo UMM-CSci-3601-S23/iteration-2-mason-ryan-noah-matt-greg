@@ -11,51 +11,8 @@ import { RequestService } from './request.service';
   providers: []
 })
 
-export class RequestDonorComponent implements OnInit, OnDestroy {
-  public serverFilteredRequests: Request[];
-  public filteredRequests: Request[];
-
-  public requestDescription: string;
-
-
-  private ngUnsubscribe = new Subject<void>();
-
-  constructor(private requestService: RequestService, private snackBar: MatSnackBar) {
-  }
-  //Gets the requests from the server with the correct filters
-  getRequestsFromServer(): void {
-    this.requestService.getRequests({
-    }).pipe(
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe({
-      next: (returnedRequests) => {
-        //this.serverFilteredRequests = returnedRequests;
-      },
-
-      error: (err) => {
-        let message = '';
-        if (err.error instanceof ErrorEvent) {
-          message = `Problem in the client – Error: {err.error.message}`;
-        } else {
-          message = `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`;
-        }
-        this.snackBar.open(
-          message,
-          'OK',
-          {duration: 5000});
-      },
-    });
-  }
-  //
-  public updateFilter(): void {
-    this.filteredRequests = this.serverFilteredRequests;
-  }
-  ngOnInit(): void {
-      this.getRequestsFromServer();
+export class RequestDonorComponent  {
+  constructor() {
   }
 
-  ngOnDestroy(): void {
-      this.ngUnsubscribe.next();
-      this.ngUnsubscribe.complete();
-  }
 }
