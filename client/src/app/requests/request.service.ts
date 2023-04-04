@@ -16,11 +16,11 @@ export class RequestService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getRequests(filters?: {name?: string}): Observable<Request[]> {
+  getRequests(filters?: {sortOrder?: string}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
-      if (filters.name) {
-        httpParams = httpParams.set('name', filters.name);
+      if (filters.sortOrder) {
+        httpParams = httpParams.set('sortOrder', filters.sortOrder);
       }
     }
     return this.httpClient.get<Request[]>(this.requestUrl, {

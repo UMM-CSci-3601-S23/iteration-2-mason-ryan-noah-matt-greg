@@ -15,6 +15,7 @@ import { RequestService } from '../requests/request.service';
 export class RequestVolunteerComponent implements OnInit, OnDestroy {
   public serverFilteredRequests: Request[];
   public filteredRequests: Request[];
+  public sortOrder: string;
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],
     ['lowSugar','Low Sugar'],
@@ -136,6 +137,7 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   //Gets the requests from the server with the correct filters
   getRequestsFromServer(): void {
     this.requestService.getRequests({
+      sortOrder: this.sortOrder,
     }).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({

@@ -19,7 +19,7 @@ import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
 
 public class FormController {
-  static final String SORT_ORDER_KEY = "sortorder";
+  static final String SORT_ORDER_KEY = "sortOrder";
 
   // private static final String SORT_ORDER_REGEX = "^(oldest|newest)$";
 
@@ -91,10 +91,8 @@ public class FormController {
     // Sort the results. Use the `sortby` query param (default "name")
     // as the field to sort by, and the query param `sortorder` (default
     // "asc") to specify the sort order.
-    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "newest");
-    Bson sortingOrder = sortOrder.equals("newest")
-    ?
-    Sorts.descending("timeSubmitted") : Sorts.ascending("timeSubmitted");
+    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortOrder"), SORT_ORDER_KEY);
+    Bson sortingOrder = sortOrder.equals("newest")?Sorts.descending("timeSubmitted") : Sorts.ascending("timeSubmitted");
     return sortingOrder;
   }
 
