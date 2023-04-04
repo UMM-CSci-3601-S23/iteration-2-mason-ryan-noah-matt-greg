@@ -10,8 +10,8 @@ import { map } from 'rxjs/operators';
 })
 export class RequestService {
   // The URL for the requests part of the server API
-  readonly requestUrl: string = `${environment.apiUrl}requests/get`;
-  readonly newRequestUrl: string = `${environment.apiUrl}requests/new`;
+  readonly requestUrl: string = `${environment.apiUrl}forms/get`;
+  readonly newRequestUrl: string = `${environment.apiUrl}form/add`;
   private readonly selKey = 'selections';
   constructor(private httpClient: HttpClient) {
   }

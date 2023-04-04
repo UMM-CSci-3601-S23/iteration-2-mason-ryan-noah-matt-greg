@@ -1,13 +1,11 @@
-package umm3601.request;
+package umm3601.form;
 
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
-import java.util.HashMap;
-
 @SuppressWarnings({"VisibilityModifier"})
 
-public class Request {
+public class Form {
   @ObjectId @Id
 
   @SuppressWarnings({"MemberName"})
@@ -16,13 +14,15 @@ public class Request {
 
   public String timeSubmitted;
   public String[] selections;
+  public String name;
+  public String diaperSize;
 
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof Request)) {
+    if (!(obj instanceof Form)) {
       return false;
     }
-    Request other = (Request) obj;
+    Form other = (Form) obj;
     return _id.equals((other._id));
   }
 

@@ -44,6 +44,7 @@ public class ItemSpec {
     assertTrue(item1.hashCode() == item2.hashCode());
   }
 
+  @SuppressWarnings({"unlikely-arg-type"})
   @Test
   void itemAreNotEqualToOtherKindsOfThings() {
     item1._id = FAKE_ID_STRING_1;

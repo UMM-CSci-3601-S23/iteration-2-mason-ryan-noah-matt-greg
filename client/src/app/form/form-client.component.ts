@@ -4,16 +4,16 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { FormService } from './client-form.service';
-import { Form } from './client-form';
+import { FormService } from './form.service';
+import { Form } from './form';
 import { RequestService } from '../requests/request.service';
 
 
 /** @title Checkboxes with reactive forms */
 @Component({
-  selector: 'app-client-form',
-  templateUrl: './client-form.component.html',
-  styleUrls: ['./client-form.component.scss']
+  selector: 'app-form-client',
+  templateUrl: './form-client.component.html',
+  styleUrls: ['./form-client.component.scss']
 })
 
 export class ClientFormComponent {
@@ -29,28 +29,6 @@ export class ClientFormComponent {
       Validators.min(1),
       Validators.max(99)
     ])],
-    miscFreshFruit: false, appleJuice: false, frozenPeaches: false, mixedFruit: false, peaches: false,
-    appleSauce: false, dates: false, carrots: false, miscFreshVegetables: false, corn: false,
-    greenBeans: false, peas: false, sweetPotatoes: false, spinach: false, cannedCarrots: false,
-    dicedTomatoes: false, spaghettiSauce: false, groundBeef: false, groundBeefOrPorkBlend: false, plantBasedBurgers: false,
-    pizzaRanchPizza: false, veggieRavioli: false, chickenDrumsticks: false, wholeChicken: false, chickenBreast: false,
-    chickenLegQtrs: false, fishSticks: false, ham: false, assortedMeats: false, chicken: false,
-    tuna: false, salmon: false, pastaWithMeatSauce: false, pastaInButterSauce: false, cannedChili: false,
-    vegCurry: false, hotDogSauce: false, blackEyedPeas: false, yellowEyedBeans: false, pintoBeans: false,
-    porkAndBeans: false, refriedBeans: false, whiteBeans: false, blackBeans: false, driedPintoBeans: false,
-    yellowSplitPeas: false, kidneyBeans: false, miscDriedBeans: false, peanutButter: false, almonds: false,
-    walnuts: false, crackers: false, cookies: false, miscSnacks: false, rice: false,
-    stuffingMix: false, pancakeMix: false, quickOats: false, readyToEatCereal: false, elbowNoodles: false,
-    macaroniAndCheese: false, pennePasta: false, instantPastaOrRice: false, bread: false, hamburgerBuns: false,
-    hotDogBuns: false, bakedGoods: false, freshMilk: false, miscDairyProducts: false, cheese: false,
-    yogurt: false, butter: false, shelfStableMilk: false, bakingMix: false, cakeMix: false,
-    flour: false, muffinMix: false, cookieMix: false, miscBakingItems: false, vegetableOil: false,
-    chickenNoodleSoup: false, tomatoSoup: false, vegetableSoup: false, creamyCannedSoup: false, miscSoup: false,
-    seasonings: false, hotSauce: false, saladDressing: false, ranchDressing: false, mustard: false,
-    syrup: false, miscPickled: false, fruitOrVegetablePuree: false, babyCereal: false, formula: false,
-    newbornGiftBag: false, diapers: false, shampoo: false, bodyOrHandSoap: false, toothpaste: false,
-    toothbrushes: false, birthdayPartyKit: false, handSanitizer: false, feminineHygiene: false, dishSoap: false,
-    laundryDetergent: false, disinfectingWipes: false,
     diaperSize: 0,
   });
 
@@ -70,6 +48,7 @@ export class ClientFormComponent {
   selections: string[] = new Array();
   isLinear = false;
   diapers = false;
+  diaperSize = '1';
 
   constructor(private formBuilder: FormBuilder,
     private snackBar: MatSnackBar, private router: Router, private requestService: RequestService){
@@ -91,8 +70,11 @@ export class ClientFormComponent {
   }
 
   submitForm() {
-    console.log(this.selections);
-    const newRequest = {selections: this.selections};
+    const date: Date = new Date();
+    const myDate: string = (date.getFullYear().toString() + date.getMonth().toString() + date.getDate().toString());
+    console.log(myDate);
+    const newRequest = {selections: this.selections, timeSubmitted: myDate, name: this.form.get('clientName').getRawValue()};
+    console.log(newRequest);
     this.requestService.addRequest(newRequest).subscribe({
       next: (newId) => {
         this.snackBar.open(

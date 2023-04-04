@@ -7,7 +7,7 @@ import {Component} from '@angular/core';
   providers: []
 })
 export class HomeComponent {
-  public userRole: 'client' | 'donor' | 'volunteer' | 'clientform';
+  public userRole: 'client' | 'donor' | 'volunteer' ;
 
   changeRole(newRole: HomeComponent['userRole']){
     this.userRole = newRole;

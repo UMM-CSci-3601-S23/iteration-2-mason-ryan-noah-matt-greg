@@ -1,4 +1,4 @@
-package umm3601.request;
+package umm3601.form;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -6,18 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class RequestSpec {
+public class FormSpec {
 
   private static final String FAKE_ID_STRING_1 = "fakeIdOne";
   private static final String FAKE_ID_STRING_2 = "fakeIdTwo";
 
-  private Request request1;
-  private Request request2;
+  private Form request1;
+  private Form request2;
 
   @BeforeEach
   void setupEach() {
-    request1 = new Request();
-    request2 = new Request();
+    request1 = new Form();
+    request2 = new Form();
   }
 
   @Test

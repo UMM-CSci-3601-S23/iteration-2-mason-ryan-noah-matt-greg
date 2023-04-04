@@ -9,8 +9,6 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,12 +38,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import io.javalin.validation.BodyValidator;
-import io.javalin.validation.ValidationException;
 import io.javalin.validation.Validator;
-import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
-import io.javalin.http.NotFoundResponse;
 import io.javalin.json.JavalinJackson;
 
 /**

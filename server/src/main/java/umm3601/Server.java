@@ -12,8 +12,7 @@ import org.bson.UuidRepresentation;
 
 import io.javalin.Javalin;
 import io.javalin.plugin.bundled.RouteOverviewPlugin;
-import umm3601.request.RequestController;
-import umm3601.user.UserController;
+import umm3601.form.FormController;
 import umm3601.item.ItemController;
 
 public class Server {
@@ -42,8 +41,7 @@ public class Server {
     MongoDatabase database = mongoClient.getDatabase(databaseName);
 
     // Initialize dependencies
-    UserController userController = new UserController(database);
-    RequestController requestController = new RequestController(database);
+    FormController formController = new FormController(database);
     ItemController itemController = new ItemController(database);
 
     Javalin server = Javalin.create(config ->
@@ -64,33 +62,16 @@ public class Server {
 
     server.start(SERVER_PORT);
 
-    // List users, filtered using query parameters
-    server.get("/api/users", userController::getUsers);
+    // Get forms, post forms, and delete forms
+    server.get("/api/forms/get", formController::getForms);
 
-    // Get the specified user
-    server.get("/api/users/{id}", userController::getUser);
+    server.post("/api/form/add", formController::addNewForm);
 
-    // Delete the specified user
-    server.delete("/api/users/{id}", userController::deleteUser);
+    server.delete("/api/requests/{id}]", formController::deleteForm);
 
-    // Add new user with the user info being in the JSON body
-    // of the HTTP request
-    server.post("/api/users", userController::addNewUser);
-
-    //Request api endpoints
-
-    //List requests, filtered using query parameters
-    server.get("/api/requests/get", requestController::getRequests);
-
-    server.post("/api/requests/new", requestController::addNewRequest);
-
-    //Deleting requests
-    server.delete("/api/requests/{id}]", requestController::deleteRequest);
-
-    //Adding items
+    // Adding items and listing items.
     server.post("/api/items/new", itemController::addNewItem);
 
-    //List items
     server.get("/api/items/get", itemController::getItems);
 
 
