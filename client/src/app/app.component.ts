@@ -7,14 +7,7 @@ import { Router,NavigationEnd  } from '@angular/router';
 })
 export class AppComponent  {
   title = 'PocketShelf';
-  currentRoute: string;
 
-  constructor(private router: Router){
-    this.router.events.subscribe((event) => {
-      if(event instanceof NavigationEnd && event.url) {
-        this.currentRoute = event.url;
-      }
-    });
-  }
+  constructor(private router: Router){}
 
 }
