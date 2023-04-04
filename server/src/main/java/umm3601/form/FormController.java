@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Objects;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.UuidRepresentation;
@@ -19,8 +17,6 @@ import java.util.Map;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
-import java.security.NoSuchAlgorithmException;
-
 
 public class FormController {
   static final String SORT_ORDER_KEY = "sortorder";
