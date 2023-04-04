@@ -1,18 +1,18 @@
 <mat-toolbar color="primary" role="navigation">
   <span>PocketShelf 2.0</span><br>
-  <button *ngIf="currentRoute!=='/'" mat-button class="clients-button" matTooltip="Clients" matTooltipPosition="left" routerLink="/" data-test="account_box">
+  <button *ngIf="currentRoute!=='/'" mat-button class="clients-button"  matTooltipPosition="right" routerLink="/" data-test="account_box">
     <mat-label >Home</mat-label>
     <mat-icon class="account_box" aria-label="Home page">home</mat-icon>
   </button>
-  <button *ngIf="currentRoute!=='/requests/donor'" mat-button class="clients-button" matTooltip="Clients" matTooltipPosition="left" routerLink="/requests/donor" data-test="account_box">
+  <button *ngIf="currentRoute!=='/requests/donor'" mat-button class="clients-button"  matTooltipPosition="right" routerLink="/requests/donor" data-test="account_box">
     <mat-label >Donors / Donantes</mat-label>
     <mat-icon class="account_box" aria-label="Donor page">favorite</mat-icon>
   </button>
-  <button *ngIf="currentRoute!=='/requests/clientform'" mat-button class="clients-button" matTooltip="Clients" matTooltipPosition="left" routerLink="/requests/clientform" data-test="account_box">
+  <button *ngIf="currentRoute!=='/requests/clientform'" mat-button class="clients-button"  matTooltipPosition="right" routerLink="/requests/clientform" data-test="account_box">
     <mat-label >Clients / Clientes</mat-label>
     <mat-icon class="account_box" aria-label="Client page">shopping_basket</mat-icon>
   </button>
-  <button *ngIf="currentRoute!=='/requests/volunteer'" mat-button class="clients-button" matTooltip="Clients" matTooltipPosition="left" routerLink="/requests/volunteer" data-test="account_box">
+  <button *ngIf="currentRoute!=='/requests/volunteer'" mat-button class="clients-button"  matTooltipPosition="right" routerLink="/requests/volunteer" data-test="account_box">
     <mat-label >Volunteers / Voluntarios</mat-label>
     <mat-icon class="account_box" aria-label="Volunteer Page">people</mat-icon>
   </button>
