@@ -30,8 +30,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { RequestDonorComponent } from './requests/request-donor.component';
-import { RequestVolunteerComponent } from './requests/request-volunteer.component';
-import { ClientFormComponent } from './form/client-form.component';
+import { RequestVolunteerComponent } from './form/form-volunteer.component';
+import { ClientFormComponent } from './form/form-client.component';
 
 
 

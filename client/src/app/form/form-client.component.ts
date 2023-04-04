@@ -4,16 +4,16 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { FormService } from './client-form.service';
-import { Form } from './client-form';
+import { FormService } from './form.service';
+import { Form } from './form';
 import { RequestService } from '../requests/request.service';
 
 
 /** @title Checkboxes with reactive forms */
 @Component({
-  selector: 'app-client-form',
-  templateUrl: './client-form.component.html',
-  styleUrls: ['./client-form.component.scss']
+  selector: 'app-form-client',
+  templateUrl: './form-client.component.html',
+  styleUrls: ['./form-client.component.scss']
 })
 
 export class ClientFormComponent {

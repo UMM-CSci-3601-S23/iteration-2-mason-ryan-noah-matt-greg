@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ClientFormComponent } from './form/client-form.component';
+import { ClientFormComponent } from './form/form-client.component';
 import { HomeComponent } from './home/home.component';
 import { RequestDonorComponent } from './requests/request-donor.component';
-import { RequestVolunteerComponent } from './requests/request-volunteer.component';
+import { RequestVolunteerComponent } from './form/form-volunteer.component';
 
 
 // Note that the 'users/new' route needs to come before 'users/:id'.

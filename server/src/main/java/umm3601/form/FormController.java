@@ -16,7 +16,6 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.mongojack.JacksonMongoCollection;
 import java.util.Map;
-import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
@@ -26,7 +25,7 @@ import java.security.NoSuchAlgorithmException;
 public class FormController {
   static final String SORT_ORDER_KEY = "sortorder";
 
-  private static final String SORT_ORDER_REGEX = "^(oldest|newest)$";
+  // private static final String SORT_ORDER_REGEX = "^(oldest|newest)$";
 
 
   private final JacksonMongoCollection<Form> requestCollection;
@@ -38,29 +37,6 @@ public class FormController {
       "requests",
       Form.class,
       UuidRepresentation.STANDARD);
-  }
-
-  /**
-   * Set the JSON body of the response to be the single request
-   * specified by the `id` parameter in the request
-   *
-   * @param ctx a Javalin HTTP context
-   */
-  public void getRequest(Context ctx) {
-    String id = ctx.pathParam("id");
-    Form request;
-
-    try {
-      request = requestCollection.find(eq("_id", new ObjectId(id))).first();
-    } catch (IllegalArgumentException e) {
-      throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID.");
-    }
-    if (request == null) {
-      throw new NotFoundResponse("The desired request was not found");
-    } else {
-      ctx.json(request);
-      ctx.status(HttpStatus.OK);
-    }
   }
 
   /**foodType and itemType

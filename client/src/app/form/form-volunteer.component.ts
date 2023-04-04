@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
-import { Request } from './request';
-import { RequestService } from './request.service';
+import { Request } from '../requests/request';
+import { RequestService } from '../requests/request.service';
 import { ItemMap } from '../item-map';
 
 
 @Component({
   selector: 'app-request-volunteer',
-  templateUrl: './request-volunteer.component.html',
-  styleUrls: ['./request-volunteer.component.scss'],
+  templateUrl: './form-volunteer.component.html',
+  styleUrls: ['./form-volunteer.component.scss'],
   providers: []
 })
 
