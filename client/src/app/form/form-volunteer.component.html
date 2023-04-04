@@ -36,7 +36,7 @@
       <mat-nav-list class="volunteer-nav-list">
         <h3 mat-subheader>Requests</h3>
         <a mat-list-item *ngFor="let request of this.serverFilteredRequests" [routerLink]="['/inventory/volunteer']" class="volunteer-list-item">
-          <span matListItemTitle mat-line class="request-date"> {{request.timeSubmitted}} </span>
+          <span matListItemTitle mat-line class="request-date-name"> {{request.name}} {{request.timeSubmitted}} </span>
           <span matListItemLine class="request-seletions"> {{request.selections}} </span>
         </a>
       </mat-nav-list>
