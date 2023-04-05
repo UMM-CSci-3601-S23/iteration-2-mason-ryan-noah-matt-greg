@@ -1,0 +1,55 @@
+
+
+<div class="flex-row">
+  <div class="flex-1">
+    <form [formGroup]="newItemForm" (ngSubmit)="submitForm();">
+      <mat-card-header>
+        <mat-card-title class = "new-request-title">
+          Add New Item
+        </mat-card-title>
+      </mat-card-header>
+    <mat-card-content>
+    <div>
+      <mat-form-field class = "name">
+        <mat-label>Item name</mat-label>
+        <input matInput formControlName="itemName"
+              required>
+        <mat-error *ngIf="formControlHasError('itemName')" data-test="itemNameError">
+          {{getErrorMessage('itemName')}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class = "amount">
+        <mat-label>Amount</mat-label>
+        <input matInput formControlName="amount"
+              required>
+        <mat-error *ngIf="formControlHasError('amount')" data-test="amountError">
+          {{getErrorMessage('amount')}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class = "unit">
+        <mat-label>Amount</mat-label>
+        <input matInput formControlName="unit"
+              required>
+        <mat-error *ngIf="formControlHasError('unit')" data-test="unitError">
+          {{getErrorMessage('unit')}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    </mat-card-content>
+    <div>
+    <mat-card-actions align="end">
+      <button
+        mat-button
+        class = "submit_button"
+        type="button"
+        [disabled]="!newItemForm.valid"
+        type="submit"
+        data-test="confirmNewRequestButton"
+      >
+        SUBMIT REQUEST
+      </button>
+    </mat-card-actions>
+  </div>
+</form>
+</div>
+</div>
