@@ -1,8 +1,0 @@
-
-<mat-list>
-  <mat-list-item class = "form-name">Name: {{ this.form.name }}</mat-list-item>
-  <mat-divider></mat-divider>
-  <mat-list-item class = "form-time">Date submitted: {{this.form.timeSubmitted}}</mat-list-item>
-  <mat-divider></mat-divider>
-  <mat-list-item *ngFor ="let string of form.selections; index as i">{{form.selections[i]}}</mat-list-item>
-</mat-list>

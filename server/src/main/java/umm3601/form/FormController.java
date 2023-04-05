@@ -40,7 +40,7 @@ public class FormController {
   public void getRequest(Context ctx) {
     String id = ctx.pathParam("id");
     Form request;
-
+    System.out.println(id);
     try {
       request = requestCollection.find(eq("_id", new ObjectId(id))).first();
       System.out.println(request);
