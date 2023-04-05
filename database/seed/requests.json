@@ -7,14 +7,19 @@
       "corn",
       "crackers",
       "ranchDressing"],
-     "timeSubmitted": "2014-10-1 3:00 PM GMT+1:00"
+     "timeSubmitted": "20141001",
+     "name": "Harry Potter"
   },
   {
     "_id": {
       "$oid": "588935f5597715f06f3e8f6c"
     },
-    "selections": ["bread", "shampoo", "tomatoSoup"],
-    "timeSubmitted": "2013-10-1 3:00 PM GMT+1:00"
+    "selections": [
+      "bread",
+      "shampoo",
+      "tomatoSoup"],
+    "timeSubmitted": "20131001",
+    "name": "Percy Jackson"
   },
   {
     "_id": {
@@ -25,7 +30,8 @@
       "glutenFree",
       "hotSauce"
     ],
-     "timeSubmitted": "2016-10-1 3:00 PM GMT+1:00"
+    "timeSubmitted": "20160101",
+    "name": "Katniss Everdeen"
   },
   {
     "_id": {
@@ -36,7 +42,8 @@
       "bakedGoods",
       "lowSugar"
     ],
-     "timeSubmitted": "2017-10-1 3:00 PM GMT+1:00"
+    "timeSubmitted": "20170915",
+    "name": "Jeff Bezos"
   },
   {
     "_id": {
@@ -47,7 +54,8 @@
       "greenBeans",
       "vegetableOil"
     ],
-     "timeSubmitted": "2018-10-1 3:00 PM GMT+1:00"
+    "timeSubmitted": "20171001",
+    "name": "Joseph R. Biden"
   },
   {
     "_id": {
@@ -58,7 +66,8 @@
       "almonds",
       "chickenNoodle"
     ],
-     "timeSubmitted": "2019-10-1 3:00 PM GMT+1:00"
+    "timeSubmitted": "20170908",
+    "name": "Edward Cullen"
   },
   {
     "_id": {
@@ -69,6 +78,8 @@
       "walnuts",
       "misc"
     ],
-     "timeSubmitted": "2015-10-1 3:00 PM GMT+1:00"
+    "timeSubmitted": "20151001",
+    "name": "Jack Frost"
+
   }
 ]

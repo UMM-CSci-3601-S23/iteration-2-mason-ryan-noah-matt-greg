@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +37,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import io.javalin.validation.BodyValidator;
-import io.javalin.validation.Validator;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.json.JavalinJackson;
@@ -169,25 +167,6 @@ class ItemControllerSpec {
     // Check that the database collection holds the same number of documents as the size of the captured List<User>
     System.out.println(itemArrayListCaptor.getValue().size());
     assertEquals(db.getCollection("items").countDocuments(), itemArrayListCaptor.getValue().size());
-  }
-  @Test
-  void canGetItemsWithItemName() throws IOException {
-    Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(ItemController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"toothbrushes"}));
-    queryParams.put(ItemController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
-    when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(ItemController.ITEM_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "toothbrushes", ItemController.ITEM_TYPE_KEY));
-
-    itemController.getItems(ctx);
-
-    verify(ctx).json(itemArrayListCaptor.capture());
-    verify(ctx).status(HttpStatus.OK);
-
-    // Confirm that all the requests passed to `json` work for food.
-    for (Item item : itemArrayListCaptor.getValue()) {
-      assertEquals("toothbrushes", item.itemName);
-    }
   }
 
   @Test

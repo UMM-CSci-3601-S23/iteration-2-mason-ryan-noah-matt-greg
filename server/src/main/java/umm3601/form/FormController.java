@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Objects;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.UuidRepresentation;
@@ -16,14 +14,14 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.mongojack.JacksonMongoCollection;
 import java.util.Map;
+
+import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
-import java.security.NoSuchAlgorithmException;
-
 
 public class FormController {
-  static final String SORT_ORDER_KEY = "sortorder";
+  static final String SORT_ORDER_KEY = "sortOrder";
 
   // private static final String SORT_ORDER_REGEX = "^(oldest|newest)$";
 
@@ -37,6 +35,24 @@ public class FormController {
       "requests",
       Form.class,
       UuidRepresentation.STANDARD);
+  }
+
+  public void getRequest(Context ctx) {
+    String id = ctx.pathParam("id");
+    Form request;
+    System.out.println(id);
+    try {
+      request = requestCollection.find(eq("_id", new ObjectId(id))).first();
+      System.out.println(request);
+    } catch (IllegalArgumentException e) {
+      throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID.");
+    }
+    if (request == null) {
+      throw new NotFoundResponse("The desired request was not found");
+    } else {
+      ctx.json(request);
+      ctx.status(HttpStatus.OK);
+    }
   }
 
   /**foodType and itemType
@@ -95,8 +111,8 @@ public class FormController {
     // Sort the results. Use the `sortby` query param (default "name")
     // as the field to sort by, and the query param `sortorder` (default
     // "asc") to specify the sort order.
-    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "newest");
-    Bson sortingOrder = sortOrder.equals("newest") ?  Sorts.descending("timeSubmitted") : Sorts.ascending("timeSubmitted");
+    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortOrder"), SORT_ORDER_KEY);
+    Bson sortingOrder = sortOrder.equals("newest")?Sorts.descending("timeSubmitted") : Sorts.ascending("timeSubmitted");
     return sortingOrder;
   }
 
@@ -110,20 +126,6 @@ public class FormController {
      */
     Form newRequest = ctx.bodyAsClass(Form.class);
 
-    /*
-    String try2 = ctx.body();
-    System.out.println(try2);
-    try2 = try2.replace("\"", "");
-    try2 = try2.replace("{", "");
-    try2 = try2.replace("}", "");
-    try2 = try2.replace("[", "");
-    try2 = try2.replace("]", "");
-    try2 = try2.replace("selections", "");
-    String[] selectionsExtracted = try2.split(",");
-    System.out.println(try2);
-    newRequest.setSelections(selectionsExtracted);
-    */
-
     requestCollection.insertOne(newRequest);
 
     ctx.json(Map.of("id", newRequest._id));
@@ -136,7 +138,7 @@ public class FormController {
 
 
   /**
-   * Delete the user specified by the `id` parameter in the request.
+   * Delete the form specified by the `id` parameter in the request.
    *
    * @param ctx a Javalin HTTP context
    */
@@ -155,20 +157,5 @@ public class FormController {
   }
 
 
-  /**
-   * Utility function to generate the md5 hash for a given string
-   *
-   * @param str the string to generate a md5 for
-   */
-  @SuppressWarnings("lgtm[java/weak-cryptographic-algorithm]")
-  public String md5(String str) throws NoSuchAlgorithmException {
-    MessageDigest md = MessageDigest.getInstance("MD5");
-    byte[] hashInBytes = md.digest(str.toLowerCase().getBytes(StandardCharsets.UTF_8));
 
-    StringBuilder result = new StringBuilder();
-    for (byte b : hashInBytes) {
-      result.append(String.format("%02x", b));
-    }
-    return result.toString();
-  }
 }

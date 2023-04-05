@@ -71,7 +71,15 @@ export class ClientFormComponent {
 
   submitForm() {
     const date: Date = new Date();
-    const myDate: string = (date.getFullYear().toString() + date.getMonth().toString() + date.getDate().toString());
+    let month: string = date.getMonth().toString();
+    let day: string = date.getDate().toString();
+    if (month.length !== 2){
+      month = '0' + month;
+    }
+    if (day.length !== 2){
+      day = '0' + day;
+    }
+    const myDate: string = (date.getFullYear().toString()+  month + day);
     console.log(myDate);
     const newRequest = {selections: this.selections, timeSubmitted: myDate, name: this.form.get('clientName').getRawValue()};
     console.log(newRequest);
@@ -82,7 +90,7 @@ export class ClientFormComponent {
           null,
           { duration: 2000 }
         );
-        // this.router.navigate(['/requests', newId]);
+        this.router.navigate(['/requests/volunteer']);
       },
       error: err => {
         this.snackBar.open(

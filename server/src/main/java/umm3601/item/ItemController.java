@@ -106,7 +106,7 @@ public class ItemController {
     Item newItem = ctx.bodyValidator(Item.class)
       .check(req -> req.itemName.matches(ITEM_NAME_REGEX), "Item must contain valid item name")
       .check(req -> req.unit.matches(ITEM_NAME_REGEX), "Unit must contain a valid string")
-      .check(req -> req.amount >= 0 , "Amount cannot be negative").get();
+      .check(req -> req.amount >= 0, "Amount cannot be negative").get();
 
 
     itemCollection.insertOne(newItem);

@@ -5,7 +5,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-//import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,14 +35,9 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import io.javalin.validation.BodyValidator;
-import io.javalin.validation.ValidationException;
-//import io.javalin.validation.Validator;
-import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
-import io.javalin.json.JavalinJackson;
 
 /**
  * Tests the logic of the FormController
@@ -77,16 +70,16 @@ class FormControllerSpec {
   private static MongoDatabase db;
 
   // Used to translate between JSON and POJOs.
-  private static JavalinJackson javalinJackson = new JavalinJackson();
+  // private static JavalinJackson javalinJackson = new JavalinJackson();
 
   @Mock
   private Context ctx;
 
   @Captor
-  private ArgumentCaptor<ArrayList<Form>> requestArrayListCaptor;
+  private ArgumentCaptor<ArrayList<Form>> formArrayListCaptor;
 
   @Captor
-  private ArgumentCaptor<Form> requestCaptor;
+  private ArgumentCaptor<Form> formCaptor;
 
   @Captor
   private ArgumentCaptor<Map<String, String>> mapCaptor;
@@ -129,40 +122,40 @@ class FormControllerSpec {
     MockitoAnnotations.openMocks(this);
 
     // Setup database
-    MongoCollection<Document> requestDocuments = db.getCollection("requests");
-    requestDocuments.drop();
-    List<Document> testRequests = new ArrayList<>();
-    testRequests.add(
+    MongoCollection<Document> formDocuments = db.getCollection("forms");
+    formDocuments.drop();
+    List<Document> testForms = new ArrayList<>();
+
+    List<String> selections1 = Arrays.asList("Fruit", "more Fruit", "and fruit");
+    List<String> selections2 = Arrays.asList("Diapers");
+    testForms.add(
         new Document()
-            .append("itemType", "food")
-            .append("description", "apple")
-            .append("foodType", "fruit"));
-    testRequests.add(
+            .append("name", "Greg")
+            .append("timeSubmitted", "")
+            .append("diaperSize", "")
+            .append("selections", selections1));
+    testForms.add(
         new Document()
-            .append("itemType", "other")
-            .append("description", "Paper Plate")
-            .append("foodType", ""));
-    testRequests.add(
-        new Document()
-            .append("itemType", "toiletries")
-            .append("description", "tooth paste")
-            .append("foodType", ""));
+        .append("timeSubmitted", "")
+            .append("diaperSize", "")
+            .append("name", "anonymous")
+            .append("selections", selections2));
 
     samsId = new ObjectId();
     Document sam = new Document()
         .append("_id", samsId)
-        .append("itemType", "food")
-        .append("description", "steak")
-        .append("foodType", "meat");
+        .append("timeSubmitted", "")
+        .append("diaperSize", "")
+        .append("selections", selections1);
 
-    requestDocuments.insertMany(testRequests);
-    requestDocuments.insertOne(sam);
+    formDocuments.insertMany(testForms);
+    formDocuments.insertOne(sam);
 
     formController = new FormController(db);
   }
 
   @Test
-  void canGetAllRequests() throws IOException {
+  void canGetAllForms() throws IOException {
     // When something asks the (mocked) context for the queryParamMap,
     // it will return an empty map (since there are no query params in this case where we want all users)
     when(ctx.queryParamMap()).thenReturn(Collections.emptyMap());
@@ -182,226 +175,12 @@ class FormControllerSpec {
 
     // Specifically, we want to pay attention to the ArrayList<User> that is passed as input
     // when ctx.json is called --- what is the argument that was passed? We capture it and can refer to it later
-    verify(ctx).json(requestArrayListCaptor.capture());
+    verify(ctx).json(formArrayListCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
 
     // Check that the database collection holds the same number of documents as the size of the captured List<User>
-    assertEquals(db.getCollection("requests").countDocuments(), requestArrayListCaptor.getValue().size());
+    assertEquals(db.getCollection("forms").countDocuments(), formArrayListCaptor.getValue().size());
   }
-
-  /*
-  @Test
-  void canGetFormssWithItemType() throws IOException {
-    Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(FormController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"food"}));
-    queryParams.put(FormController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
-    when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(FormController.ITEM_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "food", FormController.ITEM_TYPE_KEY));
-
-    formController.getFormss(ctx);
-
-    verify(ctx).json(requestArrayListCaptor.capture());
-    verify(ctx).status(HttpStatus.OK);
-
-    // Confirm that all the requests passed to `json` work for food.
-    for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("food", request.itemType);
-    }
-  }
-  @Test
-  void canGetFormssWithFoodType() throws IOException {
-    Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(FormController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"meat"}));
-    queryParams.put(FormController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
-    when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(FormController.FOOD_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "meat", FormController.FOOD_TYPE_KEY));
-
-    formController.getFormss(ctx);
-
-    verify(ctx).json(requestArrayListCaptor.capture());
-    verify(ctx).status(HttpStatus.OK);
-
-    // Confirm that all the requests passed to `json` work for food.
-    for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("meat", request.foodType);
-    }
-  }
-
-  @Test
-  public void canGetFormsWithItemTypeUppercase() throws IOException {
-    Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(FormController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"FOOD"}));
-    queryParams.put(FormController.SORT_ORDER_KEY, Arrays.asList(new String[] {"desc"}));
-    when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(FormController.ITEM_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "FOOD", FormController.ITEM_TYPE_KEY));
-
-    formController.getFormss(ctx);
-
-    verify(ctx).json(requestArrayListCaptor.capture());
-    verify(ctx).status(HttpStatus.OK);
-
-    // Confirm that all the requests passed to `json` work for food.
-    for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("food", request.itemType);
-    }
-  }
-
-  @Test
-  void getFormssByItemTypeAndFoodType() throws IOException {
-    Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put(FormController.ITEM_TYPE_KEY, Arrays.asList(new String[] {"food"}));
-    queryParams.put(FormController.FOOD_TYPE_KEY, Arrays.asList(new String[] {"fruit"}));
-    when(ctx.queryParamMap()).thenReturn(queryParams);
-    when(ctx.queryParamAsClass(FormController.ITEM_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "food", FormController.ITEM_TYPE_KEY));
-    when(ctx.queryParamAsClass(FormController.FOOD_TYPE_KEY, String.class))
-      .thenReturn(Validator.create(String.class, "fruit", FormController.FOOD_TYPE_KEY));
-
-    formController.getFormss(ctx);
-
-    verify(ctx).json(requestArrayListCaptor.capture());
-    verify(ctx).status(HttpStatus.OK);
-    assertEquals(1, requestArrayListCaptor.getValue().size());
-    for (Request request : requestArrayListCaptor.getValue()) {
-      assertEquals("food", request.itemType);
-      assertEquals("fruit", request.foodType);
-    }
-  }
-
-  @Test
-  void getFormsByID() throws IOException {
-    String id = samsId.toHexString();
-    when(ctx.pathParam("id")).thenReturn(id);
-
-    formController.getForms(ctx);
-
-    verify(ctx).json(requestCaptor.capture());
-    verify(ctx).status(HttpStatus.OK);
-    assertEquals("food", requestCaptor.getValue().itemType);
-    assertEquals("steak", requestCaptor.getValue().description);
-    assertEquals("meat", requestCaptor.getValue().foodType);
-
-  }
-
-  @Test
-  void getFormssWithExistentId() throws IOException {
-    String id = samsId.toHexString();
-    when(ctx.pathParam("id")).thenReturn(id);
-
-    formController.getForms(ctx);
-
-    verify(ctx).json(requestCaptor.capture());
-    verify(ctx).status(HttpStatus.OK);
-    assertEquals("food", requestCaptor.getValue().itemType);
-    assertEquals(samsId.toHexString(), requestCaptor.getValue()._id);
-  }
-  */
-
-  @Test
-  void getFormssWithBadId() throws IOException {
-    when(ctx.pathParam("id")).thenReturn("bad");
-
-    Throwable exception = assertThrows(BadRequestResponse.class, () -> {
-      formController.getForms(ctx);
-    });
-
-    assertEquals("The desired request id wasn't a legal Mongo Object ID.", exception.getMessage());
-  }
-
-  @Test
-  void getFormssWithNonexistentId() throws IOException {
-    String id = "588935f5c668650dc77df581";
-    when(ctx.pathParam("id")).thenReturn(id);
-
-    Throwable exception = assertThrows(NotFoundResponse.class, () -> {
-      formController.getForms(ctx);
-    });
-
-    assertEquals("The desired request was not found", exception.getMessage());
-  }
-
-  @Test
-  void addRequest() throws IOException {
-    String testNewRequest = "{"
-        + "\"itemType\": \"food\","
-        + "\"foodType\": \"meat\""
-        + "}";
-    when(ctx.bodyValidator(Form.class))
-      .then(value -> new BodyValidator<Form>(testNewRequest, Form.class, javalinJackson));
-
-    formController.addNewForm(ctx);
-    verify(ctx).json(mapCaptor.capture());
-
-    // Our status should be 201, i.e., our new user was successfully created.
-    verify(ctx).status(HttpStatus.CREATED);
-
-    //Verify that the request was added to the database with the correct ID
-    Document addedRequest = db.getCollection("requests")
-      .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
-
-    // Successfully adding the request should return the newly generated, non-empty MongoDB ID for that request.
-    assertNotEquals("", addedRequest.get("_id"));
-    assertEquals("food", addedRequest.get("itemType"));
-    assertEquals("meat", addedRequest.get("foodType"));
-  }
-
-  @Test
-  void addNullFoodTypeRequest() throws IOException {
-    String testNewRequest = "{"
-    + "\"itemType\": \"notRight\""
-    + "}";
-    when(ctx.bodyValidator(Form.class))
-      .then(value -> new BodyValidator<Form>(testNewRequest, Form.class, javalinJackson));
-
-    assertThrows(NullPointerException.class, () -> {
-      formController.addNewForm(ctx);
-    });
-  }
-
-  @Test
-  void addNullItemTypeRequest() throws IOException {
-    String testNewRequest = "{"
-    + "\"foodType\": \"meat\""
-    + "}";
-    when(ctx.bodyValidator(Form.class))
-      .then(value -> new BodyValidator<Form>(testNewRequest, Form.class, javalinJackson));
-
-    assertThrows(NullPointerException.class, () -> {
-      formController.addNewForm(ctx);
-    });
-  }
-
-  @Test
-  void addInvalidItemTypeRequest() throws IOException {
-    String testNewRequest = "{"
-    + "\"itemType\": \"notRight\","
-    + "\"foodType\": \"meat\""
-    + "}";
-    when(ctx.bodyValidator(Form.class))
-      .then(value -> new BodyValidator<Form>(testNewRequest, Form.class, javalinJackson));
-
-    assertThrows(ValidationException.class, () -> {
-      formController.addNewForm(ctx);
-    });
-  }
-
-  @Test
-  void addInvalidRoleUser() throws IOException {
-    String testNewRequest = "{"
-    + "\"itemType\": \"food\","
-    + "\"foodType\": \"notRight\""
-    + "}";
-    when(ctx.bodyValidator(Form.class))
-      .then(value -> new BodyValidator<Form>(testNewRequest, Form.class, javalinJackson));
-
-    assertThrows(ValidationException.class, () -> {
-      formController.addNewForm(ctx);
-    });
-  }
-
 
   @Test
   void deleteFoundRequest() throws IOException {
@@ -409,14 +188,14 @@ class FormControllerSpec {
     when(ctx.pathParam("id")).thenReturn(testID);
 
     // Request exists before deletion
-    assertEquals(1, db.getCollection("requests").countDocuments(eq("_id", new ObjectId(testID))));
+    assertEquals(1, db.getCollection("forms").countDocuments(eq("_id", new ObjectId(testID))));
 
     formController.deleteForm(ctx);
 
     verify(ctx).status(HttpStatus.OK);
 
     // request is no longer in the database
-    assertEquals(0, db.getCollection("requests").countDocuments(eq("_id", new ObjectId(testID))));
+    assertEquals(0, db.getCollection("forms").countDocuments(eq("_id", new ObjectId(testID))));
   }
 
   @Test
@@ -426,7 +205,7 @@ class FormControllerSpec {
 
     formController.deleteForm(ctx);
     // Request is no longer in the database
-    assertEquals(0, db.getCollection("requests").countDocuments(eq("_id", new ObjectId(testID))));
+    assertEquals(0, db.getCollection("forms").countDocuments(eq("_id", new ObjectId(testID))));
 
     assertThrows(NotFoundResponse.class, () -> {
       formController.deleteForm(ctx);
@@ -435,7 +214,7 @@ class FormControllerSpec {
     verify(ctx).status(HttpStatus.NOT_FOUND);
 
     // Request is still not in the database
-    assertEquals(0, db.getCollection("requests").countDocuments(eq("_id", new ObjectId(testID))));
+    assertEquals(0, db.getCollection("forms").countDocuments(eq("_id", new ObjectId(testID))));
   }
 
 }

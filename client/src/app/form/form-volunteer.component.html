@@ -9,14 +9,14 @@
     <!--Filters-->
     <mat-card class="search-card">
       <mat-card-header>
-        <mat-card-title class="volunteer-view-title">Needs requested</mat-card-title>
+        <mat-card-title class="volunteer-view-title">Submitted request forms</mat-card-title>
       </mat-card-header>
     <mat-card-content>
       <!--Recency Filter-->
       <div class="flex-row gap-8 flex-wrap">
         <mat-form-field class="">
           <mat-label>Sort by:</mat-label>
-          <mat-select (selectionChange)="getRequestsFromServer()" data-test="requestItemTypeSelect">
+          <mat-select [(ngModel)]="sortOrder" (selectionChange)="getFormsFromServer()" data-test="sortOrder">
             <mat-option>--</mat-option>
             <mat-option value="oldest">Oldest</mat-option>
             <mat-option value="newest">Newest</mat-option>
@@ -31,22 +31,22 @@
 
 <!--List View-->
 <div class="flex-row">
-  <div class="flex-1" *ngIf="serverFilteredRequests; else requestsError">
+  <div class="flex-1" *ngIf="serverFilteredForms; else formsError">
     <mat-card-content>
       <mat-nav-list class="volunteer-nav-list">
-        <h3 mat-subheader>Requests</h3>
-        <a mat-list-item *ngFor="let request of this.serverFilteredRequests" [routerLink]="['/inventory/volunteer']" class="volunteer-list-item">
-          <span matListItemTitle mat-line class="request-date"> {{request.timeSubmitted}} </span>
-          <span matListItemLine class="request-seletions"> {{request.selections}} </span>
+        <h3 mat-subheader>Forms</h3>
+        <a mat-list-item *ngFor="let form of this.serverFilteredForms" class="volunteer-list-item">
+          <span matListItemTitle mat-line class="form-date-name"> {{form.name}} {{form.timeSubmitted}} </span>
+          <span matListItemLine class="form-seletions"> {{form.selections}} </span>
         </a>
       </mat-nav-list>
     </mat-card-content>
   </div>
 
-  <ng-template #requestsError>
-    <div class="flex-1" class="requests-error">
+  <ng-template #formsError>
+    <div class="flex-1" class="forms-error">
       <mat-error>
-        There was a problem loading the requests. The server may be down or there are
+        There was a problem loading the forms. The server may be down or there are
         network issues.
       </mat-error>
       <mat-error>
