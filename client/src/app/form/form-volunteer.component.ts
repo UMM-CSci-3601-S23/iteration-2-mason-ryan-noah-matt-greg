@@ -1,20 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, takeUntil } from 'rxjs';
-import { Request } from '../requests/request';
-import { RequestService } from '../requests/request.service';
+import { Form } from './form';
+import { FormService } from './form.service';
 
 
 @Component({
-  selector: 'app-request-volunteer',
+  selector: 'app-form-volunteer',
   templateUrl: './form-volunteer.component.html',
   styleUrls: ['./form-volunteer.component.scss'],
   providers: []
 })
 
-export class RequestVolunteerComponent implements OnInit, OnDestroy {
-  public serverFilteredRequests: Request[];
-  public filteredRequests: Request[];
+export class FormVolunteerComponent implements OnInit, OnDestroy {
+  public serverFilteredForms: Form[];
+  public filteredForms: Form[];
   public sortOrder: string;
   readonly itemMap = new Map<string, string>([
     ['glutenFree','Gluten Free'],
@@ -132,17 +132,17 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   ]);
   private ngUnsubscribe = new Subject<void>();
 
-  constructor(private requestService: RequestService, private snackBar: MatSnackBar) {
+  constructor(private formService: FormService, private snackBar: MatSnackBar) {
   }
-  //Gets the requests from the server with the correct filters
-  getRequestsFromServer(): void {
-    this.requestService.getRequests({
+  //Gets the forms from the server with the correct filters
+  getFormsFromServer(): void {
+    this.formService.getForms({
       sortOrder: this.sortOrder,
     }).pipe(
       takeUntil(this.ngUnsubscribe)
     ).subscribe({
-      next: (returnedRequests) => {
-        this.serverFilteredRequests = this.makeSelectionsReadable(returnedRequests);
+      next: (returnedForms) => {
+        this.serverFilteredForms = this.makeFormsReadable(returnedForms);
       },
 
       error: (err) => {
@@ -161,28 +161,25 @@ export class RequestVolunteerComponent implements OnInit, OnDestroy {
   }
   //
   public updateFilter(): void {
-    this.filteredRequests = this.serverFilteredRequests;
+    this.filteredForms = this.serverFilteredForms;
   }
 
-  public makeSelectionsReadable(requestList: Request[]): Request[]{
+  public makeFormsReadable(formList: Form[]): Form[]{
     const items = this.itemMap;
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < requestList.length; i++){
-      const tempTime = requestList[i].timeSubmitted;
-      console.log(tempTime);
-      requestList[i].timeSubmitted = 'submitted a request on: ' + tempTime.substring(0, 4) + '-' +
-      tempTime.substring(4, 6) + '-' + tempTime.substring(6, 8);
-      for (let ii = 0; ii < requestList[i].selections.length; ii++){
-        console.log(requestList[i].selections[ii]);
-        requestList[i].selections[ii] = ' ' + items.get(requestList[i].selections[ii]);
+    for (let i = 0; i < formList.length; i++){
+      const tempTime = formList[i].timeSubmitted;
+      formList[i].timeSubmitted = 'submitted a form on: ' + tempTime.substring(4, 6) + '-' + tempTime.substring(6,8)
+      + '-'+ tempTime.substring(0, 4);
+      for (let ii = 0; ii < formList[i].selections.length; ii++){
+        formList[i].selections[ii] = ' ' + items.get(formList[i].selections[ii]);
       }
     }
-    return requestList;
+    return formList;
   }
 
   ngOnInit(): void {
-      this.getRequestsFromServer();
-      console.log(this.serverFilteredRequests);
+      this.getFormsFromServer();
   }
 
   ngOnDestroy(): void {
