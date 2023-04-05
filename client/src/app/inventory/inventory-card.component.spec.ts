@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ClientFormComponent } from './client-form.component';
 
+import { InventoryCardComponent } from './inventory-card.component';
 
-describe('ClientFormComponent', () => {
-  let component: ClientFormComponent;
-  let fixture: ComponentFixture<ClientFormComponent>;
+describe('InventoryCardComponent', () => {
+  let component: InventoryCardComponent;
+  let fixture: ComponentFixture<InventoryCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ClientFormComponent ]
+      declarations: [ InventoryCardComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ClientFormComponent);
+    fixture = TestBed.createComponent(InventoryCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

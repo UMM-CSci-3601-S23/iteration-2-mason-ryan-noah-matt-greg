@@ -1,5 +1,11 @@
 <div class="flex-row">
   <div class="flex-1">
+
+     <button mat-button class="clients-button" matTooltip="Clients" matTooltipPosition="left" routerLink="/inventory/volunteer" data-test="account_box">
+      <mat-label >Inventory / Inventario</mat-label>
+      <mat-icon class="account_box" aria-label="Volunteer Page">account_circle</mat-icon>
+     </button>
+
     <!--Filters-->
     <mat-card class="search-card">
       <mat-card-header>
@@ -10,7 +16,7 @@
       <div class="flex-row gap-8 flex-wrap">
         <mat-form-field class="">
           <mat-label>Sort by:</mat-label>
-          <mat-select (selectionChange)="getRequestsFromServer()" data-test="requestItemTypeSelect">
+          <mat-select [(ngModel)]="sortOrder" (selectionChange)="getRequestsFromServer()" data-test="requestItemTypeSelect">
             <mat-option>--</mat-option>
             <mat-option value="oldest">Oldest</mat-option>
             <mat-option value="newest">Newest</mat-option>
@@ -29,8 +35,8 @@
     <mat-card-content>
       <mat-nav-list class="volunteer-nav-list">
         <h3 mat-subheader>Requests</h3>
-        <a mat-list-item *ngFor="let request of this.serverFilteredRequests" [routerLink]="['/requests/volunteer', request._id]" class="volunteer-list-item">
-          <span matListItemTitle mat-line class="request-date"> {{request.timeSubmitted}} </span>
+        <a mat-list-item *ngFor="let request of this.serverFilteredRequests" [routerLink]="['/requests/', request._id]" class="volunteer-list-item">
+          <span matListItemTitle mat-line class="request-date-name"> {{request.name}} {{request.timeSubmitted}} </span>
           <span matListItemLine class="request-seletions"> {{request.selections}} </span>
         </a>
       </mat-nav-list>

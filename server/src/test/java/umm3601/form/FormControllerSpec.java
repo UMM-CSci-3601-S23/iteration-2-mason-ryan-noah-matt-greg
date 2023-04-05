@@ -1,13 +1,12 @@
-package umm3601.item;
-
-
+package umm3601.form;
 
 import static com.mongodb.client.model.Filters.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,22 +35,28 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import io.javalin.validation.BodyValidator;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
-import io.javalin.json.JavalinJackson;
+import io.javalin.http.NotFoundResponse;
 
 /**
- * Tests the logic of the ItemController
+ * Tests the logic of the FormController
  *
  * @throws IOException
  */
+// The tests here include a ton of "magic numbers" (numeric constants).
+// It wasn't clear to me that giving all of them names would actually
+// help things. The fact that it wasn't obvious what to call some
+// of them says a lot. Maybe what this ultimately means is that
+// these tests can/should be restructured so the constants (there are
+// also a lot of "magic strings" that Checkstyle doesn't actually
+// flag as a problem) make more sense.
 @SuppressWarnings({ "MagicNumber" })
-class ItemControllerSpec {
+class FormControllerSpec {
 
   // An instance of the controller we're testing that is prepared in
   // `setupEach()`, and then exercised in the various tests below.
-  private ItemController itemController;
+  private FormController formController;
 
   // A Mongo object ID that is initialized in `setupEach()` and used
   // in a few of the tests. It isn't used all that often, though,
@@ -65,21 +70,30 @@ class ItemControllerSpec {
   private static MongoDatabase db;
 
   // Used to translate between JSON and POJOs.
-  private static JavalinJackson javalinJackson = new JavalinJackson();
+  // private static JavalinJackson javalinJackson = new JavalinJackson();
 
   @Mock
   private Context ctx;
 
   @Captor
-  private ArgumentCaptor<ArrayList<Item>> itemArrayListCaptor;
+  private ArgumentCaptor<ArrayList<Form>> formArrayListCaptor;
 
   @Captor
-  private ArgumentCaptor<Item> itemCaptor;
+  private ArgumentCaptor<Form> formCaptor;
 
   @Captor
   private ArgumentCaptor<Map<String, String>> mapCaptor;
 
-
+  /**
+   * Sets up (the connection to the) DB once; that connection and DB will
+   * then be (re)used for all the tests, and closed in the `teardown()`
+   * method. It's somewhat expensive to establish a connection to the
+   * database, and there are usually limits to how many connections
+   * a database will support at once. Limiting ourselves to a single
+   * connection that will be shared across all the tests in this spec
+   * file helps both speed things up and reduce the load on the DB
+   * engine.
+   */
   @BeforeAll
   static void setupAll() {
     String mongoAddr = System.getenv().getOrDefault("MONGO_ADDR", "localhost");
@@ -93,7 +107,7 @@ class ItemControllerSpec {
   }
 
   @AfterAll/**
-  * Tests the logic of the ItemController
+  * Tests the logic of the FormController
   *
   * @throws IOException
   */
@@ -108,47 +122,47 @@ class ItemControllerSpec {
     MockitoAnnotations.openMocks(this);
 
     // Setup database
-    MongoCollection<Document> itemDocuments = db.getCollection("items");
-    itemDocuments.drop();
-    List<Document> testItems = new ArrayList<>();
-    testItems.add(
+    MongoCollection<Document> formDocuments = db.getCollection("forms");
+    formDocuments.drop();
+    List<Document> testForms = new ArrayList<>();
+
+    List<String> selections1 = Arrays.asList("Fruit", "more Fruit", "and fruit");
+    List<String> selections2 = Arrays.asList("Diapers");
+    testForms.add(
         new Document()
-            .append("itemName", "toothbrushes")
-            .append("unit", "boxes")
-            .append("amount", "123"));
-    testItems.add(
+            .append("name", "Greg")
+            .append("timeSubmitted", "")
+            .append("diaperSize", "")
+            .append("selections", selections1));
+    testForms.add(
         new Document()
-            .append("itemName", "milk")
-            .append("unit", "gallons")
-            .append("amount", "12"));
-    testItems.add(
-        new Document()
-            .append("itemName", "bread")
-            .append("unit", "loafs")
-            .append("amount", "113"));
+        .append("timeSubmitted", "")
+            .append("diaperSize", "")
+            .append("name", "anonymous")
+            .append("selections", selections2));
 
     samsId = new ObjectId();
     Document sam = new Document()
         .append("_id", samsId)
-        .append("itemName", "tomatoSoup")
-        .append("unit", "cans")
-        .append("amount", "2");
+        .append("timeSubmitted", "")
+        .append("diaperSize", "")
+        .append("selections", selections1);
 
-    itemDocuments.insertMany(testItems);
-    itemDocuments.insertOne(sam);
-    System.out.println(itemDocuments.countDocuments());
-    itemController = new ItemController(db);
+    formDocuments.insertMany(testForms);
+    formDocuments.insertOne(sam);
+
+    formController = new FormController(db);
   }
 
   @Test
-  void canGetAllItems() throws IOException {
+  void canGetAllForms() throws IOException {
     // When something asks the (mocked) context for the queryParamMap,
     // it will return an empty map (since there are no query params in this case where we want all users)
     when(ctx.queryParamMap()).thenReturn(Collections.emptyMap());
 
     // Now, go ahead and ask the userController to getUsers
     // (which will, indeed, ask the context for its queryParamMap)
-    itemController.getItems(ctx);
+    formController.getForms(ctx);
 
     // We are going to capture an argument to a function, and the type of that argument will be
     // of type ArrayList<User> (we said so earlier using a Mockito annotation like this):
@@ -161,40 +175,46 @@ class ItemControllerSpec {
 
     // Specifically, we want to pay attention to the ArrayList<User> that is passed as input
     // when ctx.json is called --- what is the argument that was passed? We capture it and can refer to it later
-    verify(ctx).json(itemArrayListCaptor.capture());
+    verify(ctx).json(formArrayListCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
 
     // Check that the database collection holds the same number of documents as the size of the captured List<User>
-    System.out.println(itemArrayListCaptor.getValue().size());
-    assertEquals(db.getCollection("items").countDocuments(), itemArrayListCaptor.getValue().size());
+    assertEquals(db.getCollection("forms").countDocuments(), formArrayListCaptor.getValue().size());
   }
 
   @Test
-  void addItem() throws IOException {
-    String testNewItem = "{"
-        + "\"itemName\": \"tomatoSoup\","
-        + "\"unit\": \"cans\","
-        + "\"amount\": 2"
-        + "}";
+  void deleteFoundRequest() throws IOException {
+    String testID = samsId.toHexString();
+    when(ctx.pathParam("id")).thenReturn(testID);
 
-    when(ctx.bodyValidator(Item.class))
-      .then(value -> new BodyValidator<Item>(testNewItem, Item.class, javalinJackson));
+    // Request exists before deletion
+    assertEquals(1, db.getCollection("forms").countDocuments(eq("_id", new ObjectId(testID))));
 
-    itemController.addNewItem(ctx);
-    verify(ctx).json(mapCaptor.capture());
+    formController.deleteForm(ctx);
 
-    // Our status should be 201, i.e., our new user was successfully created.
-    verify(ctx).status(HttpStatus.CREATED);
+    verify(ctx).status(HttpStatus.OK);
 
-    //Verify that the request was added to the database with the correct ID
-    Document addedItem = db.getCollection("items")
-      .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
-    System.out.println(addedItem);
-    // Successfully adding the request should return the newly generated, non-empty MongoDB ID for that request.
-    assertNotEquals("", addedItem.get("_id"));
-    assertEquals("bread", addedItem.get("itemName"));
-    assertEquals("loafs", addedItem.get("unit"));
-    assertEquals("amount", addedItem.get("113"));
-
+    // request is no longer in the database
+    assertEquals(0, db.getCollection("forms").countDocuments(eq("_id", new ObjectId(testID))));
   }
+
+  @Test
+  void tryToDeleteNotFoundRequest() throws IOException {
+    String testID = samsId.toHexString();
+    when(ctx.pathParam("id")).thenReturn(testID);
+
+    formController.deleteForm(ctx);
+    // Request is no longer in the database
+    assertEquals(0, db.getCollection("forms").countDocuments(eq("_id", new ObjectId(testID))));
+
+    assertThrows(NotFoundResponse.class, () -> {
+      formController.deleteForm(ctx);
+    });
+
+    verify(ctx).status(HttpStatus.NOT_FOUND);
+
+    // Request is still not in the database
+    assertEquals(0, db.getCollection("forms").countDocuments(eq("_id", new ObjectId(testID))));
+  }
+
 }

@@ -15,9 +15,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs';
 import { MockRequestService } from 'src/testing/request.service.mock';
-import { Request } from './request';
-import { RequestVolunteerComponent } from './request-volunteer.component';
-import { RequestService } from './request.service';
+import { Request } from '../requests/request';
+import { RequestVolunteerComponent } from './form-volunteer.component';
+import { RequestService } from '../requests/request.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 

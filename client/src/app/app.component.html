@@ -1,54 +1,24 @@
-<button mat-button class="clients-button" matTooltip="Clients" matTooltipPosition="left" routerLink="/" data-test="account_box">
-  <mat-label >Home</mat-label>
-  <mat-icon class="account_box" fontIcon="home" aria-label="Home page">account_circle</mat-icon>
- </button>
- <button mat-button class="clients-button" matTooltip="Clients" matTooltipPosition="left" routerLink="/requests/donor" data-test="account_box">
-  <mat-label >Donors / Donantes</mat-label>
-  <mat-icon class="account_box" aria-label="Donor page">account_circle</mat-icon>
- </button>
- <button mat-button class="clients-button" matTooltip="Clients" matTooltipPosition="left" routerLink="/requests/client" data-test="account_box">
-  <mat-label >Clients / Clientes</mat-label>
-  <mat-icon class="account_box" aria-label="Client page">account_circle</mat-icon>
- </button>
- <button mat-button class="clients-button" matTooltip="Clients" matTooltipPosition="left" routerLink="/requests/volunteer" data-test="account_box">
- <mat-label >Volunteers / Voluntarios</mat-label>
- <mat-icon class="account_box" aria-label="Volunteer Page">account_circle</mat-icon>
-</button>
+<mat-toolbar color="primary" role="navigation">
+  <span>PocketShelf 2.0</span><br>
+  <button mat-button class="clients-button"  matTooltipPosition="right" routerLink="/" data-test="account_box">
+    <mat-label >Home</mat-label>
+    <mat-icon class="account_box" aria-label="Home page">home</mat-icon>
+  </button>
+  <button mat-button class="clients-button"  matTooltipPosition="right" routerLink="/requests/donor" data-test="account_box">
+    <mat-label >Donors / Donantes</mat-label>
+    <mat-icon class="account_box" aria-label="Donor page">favorite</mat-icon>
+  </button>
+  <button mat-button class="clients-button"  matTooltipPosition="right" routerLink="/requests/clientform" data-test="account_box">
+    <mat-label >Clients / Clientes</mat-label>
+    <mat-icon class="account_box" aria-label="Client page">shopping_basket</mat-icon>
+  </button>
+  <button mat-button class="clients-button"  matTooltipPosition="right" routerLink="/requests/volunteer" data-test="account_box">
+    <mat-label >Volunteers / Voluntarios</mat-label>
+    <mat-icon class="account_box" aria-label="Volunteer Page">people</mat-icon>
+  </button>
+</mat-toolbar>
+<div class="main-content mat-typography">
+  <router-outlet></router-outlet>
+</div>
 
 
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport [autoFocus]="false">
-    <mat-toolbar>PocketShelf</mat-toolbar>
-    <mat-nav-list class="sidenav-list" role="navigation">
-
-      <!-- Side navigation links -->
-
-      <a mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active"
-        #routerLinkActiveInstance="routerLinkActive"
-        [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
-        <mat-icon matListItemIcon>home</mat-icon>
-        Home
-      </a>
-
-      <a mat-list-item routerLink="/requests/donor" routerLinkActive="drawer-list-item-active"
-      (click)="drawer.close()">
-        <mat-icon matListItemIcon>local_grocery_store</mat-icon>
-        View Requests
-      </a>
-
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button
-      (click)="drawer.toggle()" onclick="this.blur()" class="sidenav-button">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span class="app-title">{{title}}</span>
-    </mat-toolbar>
-    <div class="main-content mat-typography">
-      <router-outlet></router-outlet>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>

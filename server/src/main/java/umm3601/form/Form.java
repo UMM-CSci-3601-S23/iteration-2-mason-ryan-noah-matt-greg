@@ -1,29 +1,28 @@
-package umm3601.request;
+package umm3601.form;
 
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-
 @SuppressWarnings({"VisibilityModifier"})
 
-public class Request {
+public class Form {
   @ObjectId @Id
 
   @SuppressWarnings({"MemberName"})
 
   public String _id;
 
-  public LocalDateTime timeSubmitted;
+  public String timeSubmitted;
   public String[] selections;
+  public String name;
+  public String diaperSize;
 
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof Request)) {
+    if (!(obj instanceof Form)) {
       return false;
     }
-    Request other = (Request) obj;
+    Form other = (Form) obj;
     return _id.equals((other._id));
   }
 
@@ -32,7 +31,7 @@ public class Request {
     return _id.hashCode();
   }
 
-  public void setSelections(String[] sel){
+  public void setSelections(String[] sel) {
     this.selections = sel;
   }
 }

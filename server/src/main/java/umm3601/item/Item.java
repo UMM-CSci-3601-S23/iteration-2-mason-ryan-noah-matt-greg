@@ -30,15 +30,15 @@ public class Item {
     return _id.hashCode();
   }
 
-  public void setItemName(String in){
+  public void setItemName(String in) {
     this.itemName = in;
   }
 
-  public void setAmount(int am){
+  public void setAmount(int am) {
     this.amount = am;
   }
 
-  public void setUnit(String un){
+  public void setUnit(String un) {
     this.unit = un;
   }
 }

@@ -10,22 +10,27 @@ import { map } from 'rxjs/operators';
 })
 export class RequestService {
   // The URL for the requests part of the server API
-  readonly requestUrl: string = `${environment.apiUrl}requests/get`;
-  readonly newRequestUrl: string = `${environment.apiUrl}requests/new`;
+  readonly requestUrl: string = `${environment.apiUrl}forms/get`;
+  readonly newRequestUrl: string = `${environment.apiUrl}form/add`;
+  readonly getSpecificRequest: string = `${environment.apiUrl}requests`;
   private readonly selKey = 'selections';
   constructor(private httpClient: HttpClient) {
   }
 
-  getRequests(filters?: {name?: string}): Observable<Request[]> {
+  getRequests(filters?: {sortOrder?: string}): Observable<Request[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
-      if (filters.name) {
-        httpParams = httpParams.set('name', filters.name);
+      if (filters.sortOrder) {
+        httpParams = httpParams.set('sortOrder', filters.sortOrder);
       }
     }
     return this.httpClient.get<Request[]>(this.requestUrl, {
       params: httpParams,
     });
+  }
+
+  getRequestById(id: string): Observable<Request> {
+    return this.httpClient.get<Request>(this.getSpecificRequest + '/' + id);
   }
 
   filterRequests(requests: Request[]): Request[] {
