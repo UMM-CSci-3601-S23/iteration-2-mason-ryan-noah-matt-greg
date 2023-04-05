@@ -70,7 +70,7 @@ public class Server {
     server.delete("/api/requests/{id}]", formController::getRequest);
 
     // Adding items and listing items.
-    server.post("/api/items/new", itemController::addNewItem);
+    server.post("/api/items/add", itemController::addNewItem);
 
     server.get("/api/items/get", itemController::getItems);
 
