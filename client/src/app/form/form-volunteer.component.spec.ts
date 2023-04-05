@@ -150,13 +150,46 @@ describe('Misbehaving Volunteer view', () => {
 
 });
 
-describe('makeFormsReadable works', ()=>{
+fdescribe('makeFormsReadable works', ()=>{
   let formVolunteerList: FormVolunteerComponent;
   let fixture: ComponentFixture<FormVolunteerComponent>;
+  let formServiceStub: {
+    getForms: () => Observable<Form[]>;
+  };
+
+  beforeEach(() => {
+    formServiceStub = {
+      getForms: () => new Observable(observer => {
+        observer.error('getForms() Observer generates an error');
+      })
+    };
+
+    TestBed.configureTestingModule({
+      imports: [COMMON_IMPORTS],
+      declarations: [FormVolunteerComponent],
+      providers: [{provide: FormService, useValue: formServiceStub}]
+    });
+  });
+
+  beforeEach(waitForAsync(() => {
+    TestBed.compileComponents().then(() => {
+      fixture = TestBed.createComponent(FormVolunteerComponent);
+      formVolunteerList = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+  }));
 
   it('makeFormsReadable properly processes date values', ()=>{
     const alteredTestForms: Form[] = formVolunteerList.makeFormsReadable(testForms);
     expect(alteredTestForms[1].timeSubmitted !== '20190604').toBeTruthy();
-    expect(alteredTestForms[1].timeSubmitted !== 'submitted a form: 06-04-2019').toBeTruthy();
+    console.log(alteredTestForms[1].timeSubmitted);
+    expect(alteredTestForms[1].timeSubmitted === 'submitted a form on: 06-04-2019').toBeTruthy();
+  });
+
+  it('makeFormsReadable properly processes selections values', ()=>{
+    const alteredTestForms: Form[] = formVolunteerList.makeFormsReadable(testForms);
+    expect(alteredTestForms[3].selections[0] !== 'tomatoSoup').toBeTruthy();
+    console.log(alteredTestForms[3].selections[0]);
+    expect(alteredTestForms[3].selections[0] === ' Tomato soup').toBeTruthy();
   });
 });
