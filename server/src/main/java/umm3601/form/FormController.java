@@ -14,6 +14,8 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.mongojack.JacksonMongoCollection;
 import java.util.Map;
+
+import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
@@ -30,9 +32,27 @@ public class FormController {
   public FormController(MongoDatabase database) {
     requestCollection = JacksonMongoCollection.builder().build(
       database,
-      "forms",
+      "requests",
       Form.class,
       UuidRepresentation.STANDARD);
+  }
+
+  public void getRequest(Context ctx) {
+    String id = ctx.pathParam("id");
+    Form request;
+
+    try {
+      request = requestCollection.find(eq("_id", new ObjectId(id))).first();
+      System.out.println(request);
+    } catch (IllegalArgumentException e) {
+      throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID.");
+    }
+    if (request == null) {
+      throw new NotFoundResponse("The desired request was not found");
+    } else {
+      ctx.json(request);
+      ctx.status(HttpStatus.OK);
+    }
   }
 
   /**foodType and itemType
@@ -106,20 +126,6 @@ public class FormController {
      */
     Form newRequest = ctx.bodyAsClass(Form.class);
 
-    /*
-    String try2 = ctx.body();
-    System.out.println(try2);
-    try2 = try2.replace("\"", "");
-    try2 = try2.replace("{", "");
-    try2 = try2.replace("}", "");
-    try2 = try2.replace("[", "");
-    try2 = try2.replace("]", "");
-    try2 = try2.replace("selections", "");
-    String[] selectionsExtracted = try2.split(",");
-    System.out.println(try2);
-    newRequest.setSelections(selectionsExtracted);
-    */
-
     requestCollection.insertOne(newRequest);
 
     ctx.json(Map.of("id", newRequest._id));
@@ -132,7 +138,7 @@ public class FormController {
 
 
   /**
-   * Delete the user specified by the `id` parameter in the request.
+   * Delete the form specified by the `id` parameter in the request.
    *
    * @param ctx a Javalin HTTP context
    */

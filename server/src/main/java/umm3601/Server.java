@@ -67,7 +67,7 @@ public class Server {
 
     server.post("/api/form/add", formController::addNewForm);
 
-    server.delete("/api/requests/{id}]", formController::deleteForm);
+    server.delete("/api/requests/{id}]", formController::getRequest);
 
     // Adding items and listing items.
     server.post("/api/items/new", itemController::addNewItem);

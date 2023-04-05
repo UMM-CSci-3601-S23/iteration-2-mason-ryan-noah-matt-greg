@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { RequestDonorComponent } from './requests/request-donor.component';
 import { RequestVolunteerComponent } from './form/form-volunteer.component';
+import { FormProfileComponent } from './form/form-profile/form-profile.component';
 
 
 // Note that the 'users/new' route needs to come before 'users/:id'.
@@ -17,7 +18,8 @@ const routes: Routes = [
   {path: 'requests/client', component: ClientFormComponent, title: 'Client View'},
   {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
   {path: 'requests/clientform', component: ClientFormComponent, title: 'Client Form'},
-  {path: 'inventory/volunteer', component: InventoryComponent, title: 'Inventory'}
+  {path: 'inventory/volunteer', component: InventoryComponent, title: 'Inventory'},
+  {path: 'requests/:id', component: FormProfileComponent, title: 'Form'}
 
 ];
 

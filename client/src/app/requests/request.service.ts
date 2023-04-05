@@ -12,6 +12,7 @@ export class RequestService {
   // The URL for the requests part of the server API
   readonly requestUrl: string = `${environment.apiUrl}forms/get`;
   readonly newRequestUrl: string = `${environment.apiUrl}form/add`;
+  readonly getSpecificRequest: string = `${environment.apiUrl}requests`;
   private readonly selKey = 'selections';
   constructor(private httpClient: HttpClient) {
   }
@@ -26,6 +27,10 @@ export class RequestService {
     return this.httpClient.get<Request[]>(this.requestUrl, {
       params: httpParams,
     });
+  }
+
+  getRequestById(id: string): Observable<Request> {
+    return this.httpClient.get<Request>(this.getSpecificRequest + '/' + id);
   }
 
   filterRequests(requests: Request[]): Request[] {
