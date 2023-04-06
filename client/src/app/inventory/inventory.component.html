@@ -1,18 +1,10 @@
-<button mat-button class="clients-button" matTooltip="Clients" matTooltipPosition="left"
-  routerLink="/requests/volunteer" data-test="account_box">
-  <mat-label>Volunteers / Voluntarios</mat-label>
-  <mat-icon class="account_box" aria-label="Volunteer Page">account_circle</mat-icon>
-</button>
-
 <div class="flex-row">
   <div class="flex-1" fxFlex.gt-sm="80" fxFlexOffset.gt-sm="10">
 
     <mat-card appearance="outlined" class="search-card">
       <mat-card-title class="inventory-card-title">Inventory</mat-card-title>
       <mat-card-content class="flex-col">
-
         <button raised-mat-button routerLink="/inventory/new"><mat-icon>fastfood</mat-icon>Add new item</button>
-
       </mat-card-content>
     </mat-card>
   </div>
@@ -24,7 +16,7 @@
       <mat-card-content>
         <div class="inventory-cards-container">
           <app-inventory-card [simple]="true" *ngFor="let item of this.serverFilteredItems" class="inventory-card" [item]="item"
-            fxFlex="1 1 280px"></app-inventory-card>
+          ></app-inventory-card>
         </div>
       </mat-card-content>
     </mat-card>
