@@ -1,17 +1,11 @@
 package umm3601.item;
 
-import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Sorts;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import org.bson.Document;
 import org.bson.UuidRepresentation;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.mongojack.JacksonMongoCollection;
 import java.util.Map;
@@ -86,13 +80,6 @@ public class ItemController {
 
 
   public void addNewItem(Context ctx) {
-    /*
-     * The follow chain of statements uses the Javalin validator system
-     * to verify that instance of `User` provided in this context is
-     * a "legal" item. It checks the following things (in order):
-     *    - itemType is valid
-     *    - foodType is Valid
-     */
 
 
     /*Method 2:
@@ -106,7 +93,7 @@ public class ItemController {
     Item newItem = ctx.bodyValidator(Item.class)
       .check(req -> req.itemName.matches(ITEM_NAME_REGEX), "Item must contain valid item name")
       .check(req -> req.unit.matches(ITEM_NAME_REGEX), "Unit must contain a valid string")
-      .check(req -> req.amount >= 0, "Amount cannot be negative").get();
+      .check(req -> (req.amount > -1), "Amount must be greater than zero").get();
 
 
     itemCollection.insertOne(newItem);

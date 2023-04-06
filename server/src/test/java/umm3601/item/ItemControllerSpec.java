@@ -192,9 +192,9 @@ class ItemControllerSpec {
     System.out.println(addedItem);
     // Successfully adding the request should return the newly generated, non-empty MongoDB ID for that request.
     assertNotEquals("", addedItem.get("_id"));
-    assertEquals("bread", addedItem.get("itemName"));
-    assertEquals("loafs", addedItem.get("unit"));
-    assertEquals("amount", addedItem.get("113"));
+    assertEquals("tomatoSoup", addedItem.get("itemName"));
+    assertEquals("cans", addedItem.get("unit"));
+    assertEquals(2, addedItem.get("amount"));
 
   }
 }
