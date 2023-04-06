@@ -1,21 +1,23 @@
 <mat-toolbar color="primary" role="navigation">
-  <span>PocketShelf 2.0</span><br>
-  <button mat-button class="clients-button"  matTooltipPosition="right" routerLink="/" data-test="account_box">
-    <mat-label >Home</mat-label>
-    <mat-icon class="account_box" aria-label="Home page">home</mat-icon>
+  <div class="flex-row gap-24">
+  <span>PocketShelf 2.0</span>
+  <button mat-button class="clients-button"  matTooltipPosition="right" routerLink="/" data-test="account_box" fxFlexOffset="150">
+    <mat-label class="button-text">Home</mat-label>
+    <mat-icon class="button-icon" aria-label="Home page">home</mat-icon>
   </button>
   <button mat-button class="clients-button"  matTooltipPosition="right" routerLink="/requests/donor" data-test="account_box">
-    <mat-label >Donors / Donantes</mat-label>
-    <mat-icon class="account_box" aria-label="Donor page">favorite</mat-icon>
+    <mat-label class="button-text">Donors / Donantes</mat-label>
+    <mat-icon class="button-icon" aria-label="Donor page">favorite</mat-icon>
   </button>
   <button mat-button class="clients-button"  matTooltipPosition="right" routerLink="/requests/clientform" data-test="account_box">
-    <mat-label >Clients / Clientes</mat-label>
-    <mat-icon class="account_box" aria-label="Client page">shopping_basket</mat-icon>
+    <mat-label class="button-text">Clients / Clientes</mat-label>
+    <mat-icon class="button-icon" aria-label="Client page">shopping_basket</mat-icon>
   </button>
   <button mat-button class="clients-button"  matTooltipPosition="right" routerLink="/requests/volunteer" data-test="account_box">
-    <mat-label >Volunteers / Voluntarios</mat-label>
-    <mat-icon class="account_box" aria-label="Volunteer Page">people</mat-icon>
+    <mat-label class="button-text">Volunteers / Voluntarios</mat-label>
+    <mat-icon class="button-icon" aria-label="Volunteer Page">people</mat-icon>
   </button>
+  </div>
 </mat-toolbar>
 <div class="main-content mat-typography">
   <router-outlet></router-outlet>

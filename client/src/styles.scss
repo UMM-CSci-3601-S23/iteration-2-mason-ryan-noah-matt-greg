@@ -132,6 +132,11 @@ body {
   display: flex;
   flex-direction: row;
 }
+.flex-row-right {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+}
 .flex-col {
   display: flex;
   flex-direction: column;
@@ -153,6 +158,7 @@ body {
 
 // Gap
 .gap-8 { gap: 8px; }
+.gap-24 { gap: 24px; }
 
 // Flex/grow/shrink properties https://developer.mozilla.org/en-US/docs/Web/CSS/flex.
 .flex-1 { flex: 1 }  // Same as flex: 1 1 0 (grow, shrink, basis 0). Has similar effect to width: 100%;

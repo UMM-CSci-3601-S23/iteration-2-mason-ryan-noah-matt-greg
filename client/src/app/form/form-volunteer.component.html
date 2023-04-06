@@ -1,11 +1,5 @@
 <div class="flex-row">
   <div class="flex-1">
-
-     <button mat-button class="clients-button" matTooltip="Clients" matTooltipPosition="left" routerLink="/inventory/volunteer" data-test="account_box">
-      <mat-label >Inventory / Inventario</mat-label>
-      <mat-icon class="account_box" aria-label="Volunteer Page">account_circle</mat-icon>
-     </button>
-
     <!--Filters-->
     <mat-card class="search-card">
       <mat-card-header>
@@ -24,6 +18,10 @@
         </mat-form-field>
       </div>
 
+      <button mat-fab extended class="flew-row-right" color="primary" matTooltip="Show Inventory" matTooltipPosition="left" routerLink="/inventory/volunteer" data-test="account_box" >
+        <mat-icon aria-label="Volunteer Page">apps</mat-icon>
+        Inventory
+      </button>
     </mat-card-content>
     </mat-card>
   </div>
@@ -34,7 +32,7 @@
   <div class="flex-1" *ngIf="serverFilteredForms; else formsError">
     <mat-card-content>
       <mat-nav-list class="volunteer-nav-list">
-        <h3 mat-subheader>Forms</h3>
+        <h3 mat-subheader>Request Forms</h3>
         <a mat-list-item *ngFor="let form of this.serverFilteredForms" class="volunteer-list-item">
           <span matListItemTitle mat-line class="form-date-name"> {{form.name}} {{form.timeSubmitted}} </span>
           <span matListItemLine class="form-seletions"> {{form.selections}} </span>
