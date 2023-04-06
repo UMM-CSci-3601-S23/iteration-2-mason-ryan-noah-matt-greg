@@ -15,7 +15,6 @@ import org.bson.types.ObjectId;
 import org.mongojack.JacksonMongoCollection;
 import java.util.Map;
 
-import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
@@ -35,24 +34,6 @@ public class FormController {
       "forms",
       Form.class,
       UuidRepresentation.STANDARD);
-  }
-
-  public void getRequest(Context ctx) {
-    String id = ctx.pathParam("id");
-    Form request;
-    System.out.println(id);
-    try {
-      request = requestCollection.find(eq("_id", new ObjectId(id))).first();
-      System.out.println(request);
-    } catch (IllegalArgumentException e) {
-      throw new BadRequestResponse("The desired request id wasn't a legal Mongo Object ID.");
-    }
-    if (request == null) {
-      throw new NotFoundResponse("The desired request was not found");
-    } else {
-      ctx.json(request);
-      ctx.status(HttpStatus.OK);
-    }
   }
 
   /**foodType and itemType
@@ -118,13 +99,6 @@ public class FormController {
   }
 
   public void addNewForm(Context ctx) {
-    /*
-     * The follow chain of statements uses the Javalin validator system
-     * to verify that instance of `Request` provided in this context is
-     * a "legal" request. It checks the following things (in order):
-     *    - itemType is valid
-     *    - foodType is Valid
-     */
     Form newRequest = ctx.bodyAsClass(Form.class);
 
     requestCollection.insertOne(newRequest);

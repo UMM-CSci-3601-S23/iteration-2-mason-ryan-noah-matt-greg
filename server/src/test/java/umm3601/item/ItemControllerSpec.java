@@ -108,7 +108,7 @@ class ItemControllerSpec {
     MockitoAnnotations.openMocks(this);
 
     // Setup database
-    MongoCollection<Document> itemDocuments = db.getCollection("items");
+    MongoCollection<Document> itemDocuments = db.getCollection("inventory");
     itemDocuments.drop();
     List<Document> testItems = new ArrayList<>();
     testItems.add(
@@ -166,7 +166,7 @@ class ItemControllerSpec {
 
     // Check that the database collection holds the same number of documents as the size of the captured List<User>
     System.out.println(itemArrayListCaptor.getValue().size());
-    assertEquals(db.getCollection("items").countDocuments(), itemArrayListCaptor.getValue().size());
+    assertEquals(db.getCollection("inventory").countDocuments(), itemArrayListCaptor.getValue().size());
   }
 
   @Test
@@ -187,14 +187,14 @@ class ItemControllerSpec {
     verify(ctx).status(HttpStatus.CREATED);
 
     //Verify that the request was added to the database with the correct ID
-    Document addedItem = db.getCollection("items")
+    Document addedItem = db.getCollection("inventory")
       .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
     System.out.println(addedItem);
     // Successfully adding the request should return the newly generated, non-empty MongoDB ID for that request.
     assertNotEquals("", addedItem.get("_id"));
-    assertEquals("bread", addedItem.get("itemName"));
-    assertEquals("loafs", addedItem.get("unit"));
-    assertEquals("amount", addedItem.get("113"));
+    assertEquals("tomatoSoup", addedItem.get("itemName"));
+    assertEquals("cans", addedItem.get("unit"));
+    assertEquals(2, addedItem.get("amount"));
 
   }
 }
