@@ -30,11 +30,11 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { RequestDonorComponent } from './requests/request-donor.component';
-
 import { InventoryComponent } from './inventory/inventory.component';
 import { InventoryCardComponent } from './inventory/inventory-card.component';
-import { RequestVolunteerComponent } from './form/form-volunteer.component';
+import { FormVolunteerComponent } from './form/form-volunteer.component';
 import { ClientFormComponent } from './form/form-client.component';
+import { NewItemComponent } from './inventory/new-item/new-item.component';
 
 
 
@@ -65,10 +65,11 @@ const MATERIAL_MODULES: any[] = [
     AppComponent,
     HomeComponent,
     RequestDonorComponent,
-    RequestVolunteerComponent,
+    FormVolunteerComponent,
     ClientFormComponent,
     InventoryComponent,
     InventoryCardComponent,
+    NewItemComponent,
   ],
   imports: [
     BrowserModule,

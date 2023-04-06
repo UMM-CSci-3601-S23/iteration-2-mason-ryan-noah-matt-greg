@@ -16,11 +16,11 @@ export class FormService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getForms(filters?: {name?: string}): Observable<Form[]> {
+  getForms(filters?: {sortOrder?: string}): Observable<Form[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
-      if (filters.name) {
-        httpParams = httpParams.set('name', filters.name);
+      if (filters.sortOrder) {
+        httpParams = httpParams.set('sortOrder', filters.sortOrder);
       }
     }
     return this.httpClient.get<Form[]>(this.formUrl, {
@@ -28,11 +28,6 @@ export class FormService {
     });
   }
 
-  filterForms(forms: Form[]): Form[] {
-    const filteredForms = forms;
-
-    return filteredForms;
-  }
 
   addForm(newForm: Partial<Form>): Observable<string> {
     // Send post form to add a new Form with the Form data as the body.

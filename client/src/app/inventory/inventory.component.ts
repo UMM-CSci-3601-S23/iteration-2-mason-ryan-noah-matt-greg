@@ -2,47 +2,54 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Item } from './item';
 import { ItemService } from './item.service';
+import { Subject, takeUntil } from 'rxjs';
+
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.scss']
 })
-export class InventoryComponent implements OnInit{
-  public serverFilteredItems: Item[]; //doesnt do anything
-  public filteredItems: Item[];
+export class InventoryComponent implements OnInit {
+  public serverFilteredItems: Item[];
+  // public itemID: string;
+  // public itemName: string;
+  // public itemUnit: string;
+  // public itemAmount: string;
 
-  public itemID: string;
-  public itemName: string;
-  public itemUnit: string;
-  public itemAmount: string;
+  // public itemService: ItemService;
 
-  public itemService: ItemService;
+  private ngUnsubscribe = new Subject<void>();
 
-  constructor( private snackBar: MatSnackBar) {
+
+  constructor(private itemService: ItemService, private snackBar: MatSnackBar) {
   }
 
-  getItemsFromServer() {
+  getItemsFromServer(): void {
     this.itemService.getItems({
-      itemName: this.itemName,
-      unit: this.itemUnit,
-      amount: this.itemAmount,
-    }).subscribe(returnedItems => {
-      this.serverFilteredItems = returnedItems;
-      this.updateFilter();
-    }, err => {
-      console.error('We couldn\'t get the list of todos; the server might be down :(');
-      this.snackBar.open(
-        'Problem contacting server – try again',
-        'OK',
-        { duration: 3000 });
+    }).pipe(
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe({
+      next: (returnedItems) => {
+        this.serverFilteredItems = returnedItems;
+      },
+
+      error: (err) => {
+        let message = '';
+        if (err.error instanceof ErrorEvent) {
+          message = `Problem in the client – Error: {err.error.message}`;
+        } else {
+          message = `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`;
+        }
+        this.snackBar.open(
+          message,
+          'OK',
+          { duration: 5000 });
+      },
     });
   }
 
-  public updateFilter() {
-  }
 
   ngOnInit(): void {
-    //this.getItemsFromServer();
+    this.getItemsFromServer();
   }
 }
-
