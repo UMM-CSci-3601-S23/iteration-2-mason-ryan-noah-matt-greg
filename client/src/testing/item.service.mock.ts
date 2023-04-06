@@ -34,4 +34,8 @@ export class MockItemService extends ItemService {
   constructor() {
     super(null);
   }
+
+  getForms(): Observable<Item[]> {
+    return of(MockItemService.testItems);
+}
 }

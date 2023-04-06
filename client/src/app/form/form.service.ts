@@ -28,11 +28,6 @@ export class FormService {
     });
   }
 
-  filterForms(forms: Form[]): Form[] {
-    const filteredForms = forms;
-
-    return filteredForms;
-  }
 
   addForm(newForm: Partial<Form>): Observable<string> {
     // Send post form to add a new Form with the Form data as the body.

@@ -10,9 +10,7 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./inventory.component.scss']
 })
 export class InventoryComponent implements OnInit {
-  public serverFilteredItems: Item[]; //doesnt do anything
-  public filteredItems: Item[];
-
+  public serverFilteredItems: Item[];
   // public itemID: string;
   // public itemName: string;
   // public itemUnit: string;
@@ -53,6 +51,5 @@ export class InventoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.getItemsFromServer();
-    console.log(this.serverFilteredItems);
   }
 }

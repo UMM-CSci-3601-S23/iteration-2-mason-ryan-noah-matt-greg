@@ -32,7 +32,6 @@ export class ItemService {
 
   filterItems(items: Item[]): Item[] {
     const filteredItems = items;
-
     return filteredItems;
   }
 

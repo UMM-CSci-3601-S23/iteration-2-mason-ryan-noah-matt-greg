@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { FormService } from './form.service';
 import { Form } from './form';
-import { RequestService } from '../requests/request.service';
+
 
 
 /** @title Checkboxes with reactive forms */
@@ -19,15 +19,10 @@ import { RequestService } from '../requests/request.service';
 export class ClientFormComponent {
 
   form = this.formBuilder.group({
-    clientName:['anonymous', Validators.compose([
+    clientName:['', Validators.compose([
       Validators.required,
       Validators.minLength(2),
       Validators.maxLength(50),
-    ])],
-    familySize:['', Validators.compose([
-      Validators.required,
-      Validators.min(1),
-      Validators.max(99)
     ])],
     diaperSize: 0,
   });
@@ -37,11 +32,6 @@ export class ClientFormComponent {
       {type: 'required', message: 'Name is required'},
       {type: 'minlength', message: 'Name must be at least 2 characters long'},
       {type: 'maxlength', message: 'Name cannot be more than 50 characters long'},
-    ],
-    household: [
-      {type: 'required', message: 'Household size is required'},
-      {type: 'min', message: 'Household size must be greater than 0'},
-      {type: 'max', message: 'Household size must be less than 21'}
     ]
   };
 
@@ -49,9 +39,11 @@ export class ClientFormComponent {
   isLinear = false;
   diapers = false;
   diaperSize = '1';
+  date: Date = new Date();
+  done = false;
 
   constructor(private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar, private router: Router, private requestService: RequestService){
+    private snackBar: MatSnackBar, private router: Router, private formService: FormService){
     }
 
 
@@ -60,7 +52,7 @@ export class ClientFormComponent {
       (this.form.get(controlName).dirty || this.form.get(controlName).touched);
   }
 
-  getErrorMessage(name: keyof typeof this.newRequestValidationMessages): string {
+  getErrorMessage(name: string): string {
     for(const {type, message} of this.newRequestValidationMessages[name]) {
       if (this.form.get(name).hasError(type)) {
         return message;
@@ -70,20 +62,18 @@ export class ClientFormComponent {
   }
 
   submitForm() {
-    const date: Date = new Date();
-    let month: string = date.getMonth().toString();
-    let day: string = date.getDate().toString();
+    let month: string = this.date.getMonth().toString();
+    let day: string = this.date.getDate().toString();
     if (month.length !== 2){
       month = '0' + month;
     }
     if (day.length !== 2){
       day = '0' + day;
     }
-    const myDate: string = (date.getFullYear().toString()+  month + day);
+    const myDate: string = (this.date.getFullYear().toString()+  month + day);
     console.log(myDate);
-    const newRequest = {selections: this.selections, timeSubmitted: myDate, name: this.form.get('clientName').getRawValue()};
-    console.log(newRequest);
-    this.requestService.addRequest(newRequest).subscribe({
+    const newForm = {selections: this.selections, timeSubmitted: myDate, name: this.form.get('clientName').getRawValue()};
+    this.formService.addForm(newForm).subscribe({
       next: (newId) => {
         this.snackBar.open(
           `Request successfully submitted`,
@@ -99,7 +89,7 @@ export class ClientFormComponent {
           { duration: 20000 }
         );
       },
-      complete: () => console.log('Add user completes!')
+      complete: () => this.done = true
     });
   }
 
@@ -109,9 +99,8 @@ export class ClientFormComponent {
     }
     else {this.diapers = true;}
   }
+
   updateList(newItem: string): void{
-    console.log('updating list...');
-    console.log(this.selections);
     if (newItem === 'diapers'){
       this.updateDiapers();
     }

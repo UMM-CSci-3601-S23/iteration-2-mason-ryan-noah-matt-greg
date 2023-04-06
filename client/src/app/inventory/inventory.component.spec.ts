@@ -44,9 +44,10 @@ describe('InventoryComponent', () => {
   let fixture: ComponentFixture<InventoryComponent>;
 
   beforeEach(() => {
+    TestBed.overrideProvider(ItemService, { useValue: new MockItemService() });
     TestBed.configureTestingModule({
       imports: [COMMON_IMPORTS],
-      declarations: [InventoryComponent],
+      declarations: [InventoryComponent, InventoryCardComponent],
       providers: [{ provide: ItemService, useValue: new MockItemService() }]
     });
   });
@@ -59,55 +60,30 @@ describe('InventoryComponent', () => {
     });
   }));
 
-  it('contains all the items', () => {
-    expect(inventory.serverFilteredItems.length).toBe(3);
+  describe('The getItemsFromServer method', ()=>{
+    it('contains all the items', () => {
+      expect(inventory.serverFilteredItems.length).toBe(3);
+    });
+
+    it('contains an item called "banana"', () => {
+      expect(inventory.serverFilteredItems.some((item: Item) => item.itemName === 'banana')).toBe(true);
+    });
+
+    it('contains an item called "soup"', () => {
+      expect(inventory.serverFilteredItems.some((item: Item) => item.itemName === 'soup')).toBe(true);
+    });
+
+    it('contains an item called "eggs"', () => {
+      expect(inventory.serverFilteredItems.some((item: Item) => item.itemName === 'eggs')).toBe(true);
+    });
+
+    it('doesn\'t contain a todo whose owner is  "Santa"', () => {
+      expect(inventory.serverFilteredItems.some((item: Item) => item.itemName === 'Santa')).toBe(false);
+    });
+
   });
 
-  it('contains an item called "banana"', () => {
-    expect(inventory.serverFilteredItems.some((item: Item) => item.itemName === 'banana')).toBe(true);
-  });
-
-  it('contains an item called "soup"', () => {
-    expect(inventory.serverFilteredItems.some((item: Item) => item.itemName === 'soup')).toBe(true);
-  });
-
-  it('contains an item called "eggs"', () => {
-    expect(inventory.serverFilteredItems.some((item: Item) => item.itemName === 'eggs')).toBe(true);
-  });
-
-  it('doesn\'t contain a todo whose owner is  "Santa"', () => {
-    expect(inventory.serverFilteredItems.some((item: Item) => item.itemName === 'Santa')).toBe(false);
-  });
 });
 
-// describe('Misbehaving Items', () => {
-//   let inventory: InventoryComponent;
-//   let fixture: ComponentFixture<InventoryComponent>;
-//   let itemServiceStub: {
-//     getItems:() => Observable<Item[]>
-//   }
-// })
 
-//   it('should create', () => {
-//     expect(component).toBeTruthy();
-//   });
-//   it('contains all the items', () => {
-//     expect(item.serverFilteredItems.length).toBe(3);
-//   });
-
-//   it('contains a todo whose owner is  "Chris"', () => {
-//     expect(todoList.serverFilteredTodos.some((todo: Todo) => todo.owner === 'Chris')).toBe(true);
-//   });
-
-//   it('contains a todo whose owner is  "Jamie"', () => {
-//     expect(todoList.serverFilteredTodos.some((todo: Todo) => todo.owner === 'Jamie')).toBe(true);
-//   });
-
-//   it('doesn\'t contain a todo whose owner is  "Santa"', () => {
-//     expect(todoList.serverFilteredTodos.some((todo: Todo) => todo.owner === 'Santa')).toBe(false);
-//   });
-
-//   it('has two todos that with category movies', () => {
-//     expect(todoList.serverFilteredTodos.filter((todo: Todo) => todo.category === 'Movies').length).toBe(2);
-//   });
 
