@@ -1,11 +1,13 @@
 package umm3601.form;
 
+
+
+
 import static com.mongodb.client.model.Filters.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -146,6 +148,7 @@ class FormControllerSpec {
         .append("_id", samsId)
         .append("timeSubmitted", "")
         .append("diaperSize", "")
+        .append("name", "Ryan")
         .append("selections", selections1);
 
     formDocuments.insertMany(testForms);

@@ -32,7 +32,7 @@ public class FormController {
   public FormController(MongoDatabase database) {
     requestCollection = JacksonMongoCollection.builder().build(
       database,
-      "requests",
+      "forms",
       Form.class,
       UuidRepresentation.STANDARD);
   }
@@ -112,7 +112,8 @@ public class FormController {
     // as the field to sort by, and the query param `sortorder` (default
     // "asc") to specify the sort order.
     String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortOrder"), SORT_ORDER_KEY);
-    Bson sortingOrder = sortOrder.equals("newest")?Sorts.descending("timeSubmitted") : Sorts.ascending("timeSubmitted");
+    Bson sortingOrder = sortOrder.equals("newest")
+    ? Sorts.descending("timeSubmitted") : Sorts.ascending("timeSubmitted");
     return sortingOrder;
   }
 
