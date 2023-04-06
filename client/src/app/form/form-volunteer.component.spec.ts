@@ -150,7 +150,7 @@ describe('Misbehaving Volunteer view', () => {
 
 });
 
-fdescribe('makeFormsReadable works', ()=>{
+describe('makeFormsReadable works', ()=>{
   let formVolunteerList: FormVolunteerComponent;
   let fixture: ComponentFixture<FormVolunteerComponent>;
   let formServiceStub: {
