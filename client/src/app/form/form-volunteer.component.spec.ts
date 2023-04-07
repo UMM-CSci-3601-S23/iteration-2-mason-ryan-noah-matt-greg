@@ -21,48 +21,7 @@ import { FormService } from './form.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-const testForms: Form[] = [
-  {
-    _id: '1_id',
-    name: 'Chris Pine',
-    selections: [
-      'miscSnacks',
-      'bread',
-      'greenBeans'
-    ],
-    timeSubmitted: '20180604'
-  },
-  {
-    _id: '2_id',
-    name: 'Micheal Cera',
-    selections: [
-      'yogurt',
-      'cheese',
-      'carrots'
-    ],
-    timeSubmitted: '20190604'
-  },
-  {
-    _id: '3_id',
-    name: 'Margot Robbie',
-    selections: [
-      'hotSauce',
-      'bakedGoods',
-      'milk'
-    ],
-    timeSubmitted: '20170604'
-  },
-  {
-    _id: '4_id',
-    name: 'John Cena',
-    selections: [
-      'tomatoSoup',
-      'groundBeef',
-      'corn'
-    ],
-    timeSubmitted: '20200604'
-  }
-];
+
 
 const COMMON_IMPORTS: unknown[] = [
   FormsModule,
@@ -107,71 +66,44 @@ describe('Volunteer Form View', () => {
     expect(formVolunteerList.serverFilteredForms.length).toBe(4);
   });
 
+  it('contains a form with name Chris Pine', () => {
+    expect(formVolunteerList.serverFilteredForms.some((form: Form) => form.name === 'Chris Pine')).toBe(true);
+  });
+
+  it('doesn\'t contains a form with name Thor', () => {
+    expect(formVolunteerList.serverFilteredForms.some((form: Form) => form.name === 'Thor')).toBe(false);
+  });
+
+  it('contains a form with timeSubmitted 20190604', () => {
+    expect(formVolunteerList.serverFilteredForms.some((form: Form) => form.timeSubmitted === 'submitted a form on: 06-04-2019')).toBe(true);
+  });
+
 });
 
 describe('Misbehaving Volunteer view', () => {
   let formVolunteerList: FormVolunteerComponent;
   let fixture: ComponentFixture<FormVolunteerComponent>;
 
-  let formServiceStub: {
-    getForms: () => Observable<Form[]>;
-  };
-
-  beforeEach(() => {
-    formServiceStub = {
-      getForms: () => new Observable(observer => {
-        observer.error('getForms() Observer generates an error');
-      })
-    };
-
-    TestBed.configureTestingModule({
-      imports: [COMMON_IMPORTS],
-      declarations: [FormVolunteerComponent],
-      providers: [{provide: FormService, useValue: formServiceStub}]
-    });
-  });
-
-  beforeEach(waitForAsync(() => {
-    TestBed.compileComponents().then(() => {
-      fixture = TestBed.createComponent(FormVolunteerComponent);
-      formVolunteerList = fixture.componentInstance;
-      fixture.detectChanges();
-    });
-  }));
-
   it('generates an error if we don\'t set up a FormVolunteerService', () => {
     expect(formVolunteerList.serverFilteredForms).toBeUndefined();
   });
 
-  it('updateFilter properly reassigns our form list', ()=>{
-    formVolunteerList.updateFilter();
-    expect(formVolunteerList.filteredForms === formVolunteerList.serverFilteredForms).toBeTruthy();
-  });
-
 });
 
-fdescribe('makeFormsReadable works', ()=>{
+
+describe('makeFormsReadable works as expected', ()=>{
   let formVolunteerList: FormVolunteerComponent;
   let fixture: ComponentFixture<FormVolunteerComponent>;
-  let formServiceStub: {
-    getForms: () => Observable<Form[]>;
-  };
 
   beforeEach(() => {
-    formServiceStub = {
-      getForms: () => new Observable(observer => {
-        observer.error('getForms() Observer generates an error');
-      })
-    };
-
     TestBed.configureTestingModule({
       imports: [COMMON_IMPORTS],
       declarations: [FormVolunteerComponent],
-      providers: [{provide: FormService, useValue: formServiceStub}]
+      providers: [{ provide: FormService, useValue: new MockFormService() }]
     });
   });
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(waitForAsync (() => {
     TestBed.compileComponents().then(() => {
       fixture = TestBed.createComponent(FormVolunteerComponent);
       formVolunteerList = fixture.componentInstance;
@@ -180,16 +112,58 @@ fdescribe('makeFormsReadable works', ()=>{
   }));
 
   it('makeFormsReadable properly processes date values', ()=>{
-    const alteredTestForms: Form[] = formVolunteerList.makeFormsReadable(testForms);
+    const alteredTestForms: Form[] = formVolunteerList.makeFormsReadable(formVolunteerList.serverFilteredForms);
     expect(alteredTestForms[1].timeSubmitted !== '20190604').toBeTruthy();
-    console.log(alteredTestForms[1].timeSubmitted);
     expect(alteredTestForms[1].timeSubmitted === 'submitted a form on: 06-04-2019').toBeTruthy();
   });
 
   it('makeFormsReadable properly processes selections values', ()=>{
-    const alteredTestForms: Form[] = formVolunteerList.makeFormsReadable(testForms);
-    expect(alteredTestForms[3].selections[0] !== 'tomatoSoup').toBeTruthy();
-    console.log(alteredTestForms[3].selections[0]);
-    expect(alteredTestForms[3].selections[0] === ' Tomato soup').toBeTruthy();
+    const testForms2: Form[] = [
+      {
+        _id: '1_id',
+        name: 'Chris Pine',
+        selections: [
+          'miscSnacks',
+          'bread',
+          'greenBeans'
+        ],
+        timeSubmitted: '20180604'
+      },
+      {
+        _id: '2_id',
+        name: 'Micheal Cera',
+        selections: [
+          'yogurt',
+          'cheese',
+          'carrots'
+        ],
+        timeSubmitted: '20190604'
+      },
+      {
+        _id: '3_id',
+        name: 'Margot Robbie',
+        selections: [
+          'hotSauce',
+          'bakedGoods',
+          'milk'
+        ],
+        timeSubmitted: '20170604'
+      },
+      {
+        _id: '4_id',
+        name: 'John Cena',
+        selections: [
+          'tomatoSoup',
+          'groundBeef',
+          'corn'
+        ],
+        timeSubmitted: '20200604'
+      }
+    ];
+    const alteredTestForms2: Form[] = formVolunteerList.makeFormsReadable(testForms2);
+    expect(alteredTestForms2[3].selections[0] !== 'tomatoSoup').toBeTruthy();
+    expect(alteredTestForms2[3].selections[0] === ' Tomato soup').toBeTruthy();
   });
 });
+
+

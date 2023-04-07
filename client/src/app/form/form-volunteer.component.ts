@@ -159,18 +159,19 @@ export class FormVolunteerComponent implements OnInit, OnDestroy {
       },
     });
   }
-  //
-  public updateFilter(): void {
-    this.filteredForms = this.serverFilteredForms;
-  }
 
   public makeFormsReadable(formList: Form[]): Form[]{
     const items = this.itemMap;
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < formList.length; i++){
       const tempTime = formList[i].timeSubmitted;
-      formList[i].timeSubmitted = 'submitted a form on: ' + tempTime.substring(4, 6) + '-' + tempTime.substring(6,8)
+      if (tempTime.includes('submitted a form on:')){
+        formList[i].timeSubmitted = tempTime;
+      }else{
+        formList[i].timeSubmitted = 'submitted a form on: ' + tempTime.substring(4, 6) + '-' + tempTime.substring(6,8)
       + '-'+ tempTime.substring(0, 4);
+      }
+      console.log(formList[i].timeSubmitted);
       for (let ii = 0; ii < formList[i].selections.length; ii++){
         formList[i].selections[ii] = ' ' + items.get(formList[i].selections[ii]);
       }

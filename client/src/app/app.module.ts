@@ -34,6 +34,7 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { InventoryCardComponent } from './inventory/inventory-card.component';
 import { FormVolunteerComponent } from './form/form-volunteer.component';
 import { ClientFormComponent } from './form/form-client.component';
+import { NewItemComponent } from './inventory/new-item/new-item.component';
 
 
 
@@ -68,6 +69,7 @@ const MATERIAL_MODULES: any[] = [
     ClientFormComponent,
     InventoryComponent,
     InventoryCardComponent,
+    NewItemComponent,
   ],
   imports: [
     BrowserModule,

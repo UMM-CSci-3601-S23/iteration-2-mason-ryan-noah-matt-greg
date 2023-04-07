@@ -4,6 +4,7 @@ import { ClientFormComponent } from './form/form-client.component';
 import { HomeComponent } from './home/home.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { RequestDonorComponent } from './requests/request-donor.component';
+import { NewItemComponent } from './inventory/new-item/new-item.component';
 import { FormVolunteerComponent } from './form/form-volunteer.component';
 
 
@@ -18,7 +19,8 @@ const routes: Routes = [
   {path: 'requests/client', component: ClientFormComponent, title: 'Client View'},
   {path: 'requests/donor', component: RequestDonorComponent, title: 'Donor View'},
   {path: 'requests/clientform', component: ClientFormComponent, title: 'Client Form'},
-  {path: 'inventory/volunteer', component: InventoryComponent, title: 'Inventory'}
+  {path: 'inventory/volunteer', component: InventoryComponent, title: 'Inventory'},
+  {path: 'inventory/new', component: NewItemComponent}
 
 ];
 

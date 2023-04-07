@@ -178,8 +178,7 @@ class FormControllerSpec {
     // We reset the values of our annotated declarations using the command
     // `MockitoAnnotations.openMocks(this);` in our @BeforeEach
 
-    // Specifically, we want to pay attention to the ArrayList<User> that is passed as input
-    // when ctx.json is called --- what is the argument that was passed? We capture it and can refer to it later
+
     verify(ctx).json(formArrayListCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
 
