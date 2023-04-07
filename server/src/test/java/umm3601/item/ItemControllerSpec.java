@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import io.javalin.validation.BodyValidator;
+import io.javalin.validation.ValidationException;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.json.JavalinJackson;
@@ -195,6 +197,23 @@ class ItemControllerSpec {
     assertEquals("tomatoSoup", addedItem.get("itemName"));
     assertEquals("cans", addedItem.get("unit"));
     assertEquals(2, addedItem.get("amount"));
-
   }
+
+  @Test
+  void addItemInvalidAmount() throws IOException {
+    String testNewItem = "{"
+        + "\"itemName\": \"tomatoSoup\","
+        + "\"unit\": \"cans\","
+        + "\"amount\": -2"
+        + "}";
+
+    when(ctx.bodyValidator(Item.class))
+      .then(value -> new BodyValidator<Item>(testNewItem, Item.class, javalinJackson));
+
+
+    assertThrows(ValidationException.class, () -> {
+      itemController.addNewItem(ctx);
+    });
+  }
+
 }

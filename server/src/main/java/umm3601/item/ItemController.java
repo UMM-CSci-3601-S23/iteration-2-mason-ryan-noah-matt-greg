@@ -1,19 +1,12 @@
 package umm3601.item;
 
-import static com.mongodb.client.model.Filters.eq;
 import java.util.ArrayList;
 import com.mongodb.client.MongoDatabase;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import org.bson.UuidRepresentation;
-import org.bson.types.ObjectId;
 import org.mongojack.JacksonMongoCollection;
 import java.util.Map;
-import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
-import io.javalin.http.NotFoundResponse;
-import java.security.NoSuchAlgorithmException;
 
 public class ItemController {
   static final String ITEM_TYPE_KEY = "itemType";
@@ -30,28 +23,6 @@ public class ItemController {
       "inventory",
       Item.class,
       UuidRepresentation.STANDARD);
-  }
-  /**
-   * Set the JSON body of the response to be the single Item
-   * specified by the `id` parameter in the Item
-   *
-   * @param ctx a Javalin HTTP context
-   */
-  public void getItem(Context ctx) {
-    String id = ctx.pathParam("id");
-    Item item;
-
-    try {
-      item = itemCollection.find(eq("_id", new ObjectId(id))).first();
-    } catch (IllegalArgumentException e) {
-      throw new BadRequestResponse("The desired Item id wasn't a legal Mongo Object ID.");
-    }
-    if (item == null) {
-      throw new NotFoundResponse("The desired Item was not found");
-    } else {
-      ctx.json(item);
-      ctx.status(HttpStatus.OK);
-    }
   }
 
   /**
@@ -97,23 +68,6 @@ public class ItemController {
     // See, e.g., https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
     // for a description of the various response codes.
     ctx.status(HttpStatus.CREATED);
-  }
-
-    /**
-   * Utility function to generate the md5 hash for a given string
-   *
-   * @param str the string to generate a md5 for
-   */
-  @SuppressWarnings("lgtm[java/weak-cryptographic-algorithm]")
-  public String md5(String str) throws NoSuchAlgorithmException {
-    MessageDigest md = MessageDigest.getInstance("MD5");
-    byte[] hashInBytes = md.digest(str.toLowerCase().getBytes(StandardCharsets.UTF_8));
-
-    StringBuilder result = new StringBuilder();
-    for (byte b : hashInBytes) {
-      result.append(String.format("%02x", b));
-    }
-    return result.toString();
   }
 }
 
