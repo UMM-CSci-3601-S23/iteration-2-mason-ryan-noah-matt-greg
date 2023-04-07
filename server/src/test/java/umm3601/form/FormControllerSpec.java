@@ -1,11 +1,14 @@
 package umm3601.form;
 
+
+
+
 import static com.mongodb.client.model.Filters.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -38,6 +41,7 @@ import org.mockito.MockitoAnnotations;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
+import io.javalin.json.JavalinJackson;
 
 /**
  * Tests the logic of the FormController
@@ -70,7 +74,7 @@ class FormControllerSpec {
   private static MongoDatabase db;
 
   // Used to translate between JSON and POJOs.
-  // private static JavalinJackson javalinJackson = new JavalinJackson();
+  private static JavalinJackson javalinJackson = new JavalinJackson();
 
   @Mock
   private Context ctx;
@@ -137,15 +141,16 @@ class FormControllerSpec {
     testForms.add(
         new Document()
         .append("timeSubmitted", "")
-            .append("diaperSize", "")
-            .append("name", "anonymous")
+            .append("diaperSize", "2")
+            .append("name", "Ryan")
             .append("selections", selections2));
 
     samsId = new ObjectId();
     Document sam = new Document()
         .append("_id", samsId)
-        .append("timeSubmitted", "")
-        .append("diaperSize", "")
+        .append("timeSubmitted", "03-06-2023")
+        .append("diaperSize", "2")
+        .append("name", "Mat")
         .append("selections", selections1);
 
     formDocuments.insertMany(testForms);
@@ -179,6 +184,40 @@ class FormControllerSpec {
 
     // Check that the database collection holds the same number of documents as the size of the captured List<User>
     assertEquals(db.getCollection("forms").countDocuments(), formArrayListCaptor.getValue().size());
+  }
+
+  @Test
+  void canAddNewForm() throws IOException {
+    String testNewForm = "{"
+    + "\"timeSubmitted\": \"03-06-2023\","
+    + "\"name\": \"Mat\","
+    + "\"diaperSize\": 2,"
+    + "\"selections\": [ \"Fruit\", \"more Fruit\", \"and fruit\"]"
+    + "}";
+
+    //when(ctx.bodyValidator(Form.class))
+    //  .then(value -> new BodyValidator<Form>(testNewForm, Form.class, javalinJackson));
+    when(ctx.bodyAsClass(Form.class))
+      .then(value -> javalinJackson.fromJsonString(testNewForm, Form.class));
+
+    formController.addNewForm(ctx);
+    verify(ctx).json(mapCaptor.capture());
+
+    // Our status should be 201, i.e., our new user was successfully created.
+    verify(ctx).status(HttpStatus.CREATED);
+
+    List<String> selections1 = Arrays.asList("Fruit", "more Fruit", "and fruit");
+
+    //Verify that the request was added to the database with the correct ID
+    Document addedForm = db.getCollection("forms")
+      .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
+    System.out.println(addedForm);
+    // Successfully adding the form should return the newly generated, non-empty MongoDB ID for that form.
+    assertNotEquals("", addedForm.get("_id"));
+    assertEquals("03-06-2023", addedForm.get("timeSubmitted"));
+    assertEquals("Mat", addedForm.get("name"));
+    assertEquals("2", addedForm.get("diaperSize"));
+    assertEquals(selections1, addedForm.get("selections"));
   }
 
   @Test

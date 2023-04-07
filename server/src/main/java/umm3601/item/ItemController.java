@@ -27,7 +27,7 @@ public class ItemController {
   public ItemController(MongoDatabase database) {
     itemCollection = JacksonMongoCollection.builder().build(
       database,
-      "items",
+      "inventory",
       Item.class,
       UuidRepresentation.STANDARD);
   }
@@ -80,14 +80,6 @@ public class ItemController {
 
 
   public void addNewItem(Context ctx) {
-
-
-    /*Method 2:
-    Item newItem = new Item();
-    newItem.setAmount(Integer.parseInt(ctx.queryParam("amount")));
-    newItem.setItemName(ctx.queryParam("itemName"));
-    newItem.setUnit(ctx.queryParam("unit"));
-    */
 
     //Method 1:
     Item newItem = ctx.bodyValidator(Item.class)
